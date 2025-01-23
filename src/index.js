@@ -15,7 +15,9 @@ try {
 				from: "inline",
 				config: {
 					serverMode: "full",
-					url: "/dist/test.db",
+					// production path is /stuff-plus-simple/dist/test.db
+					// dev path is        /dist/test.db
+					url: "/stuff-plus-simple/dist/test.db",
 					requestChunkSize: 4096,
 				},
 			},
