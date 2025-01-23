@@ -17,6 +17,7 @@ try {
 					serverMode: "full",
 					// production path is /stuff-plus-simple/dist/test.db
 					// dev path is        /dist/test.db
+					// url: "/dist/test.db",
 					url: "/stuff-plus-simple/dist/test.db",
 					requestChunkSize: 4096,
 				},
@@ -37,6 +38,7 @@ class EntryPoint {
 		const pitcherName = document.getElementById("pName").value
 		const pitcherId = document.getElementById("pId").value
 		const sortBy = document.getElementById("sortBy").value
+		const direction = document.getElementById("direction").value
 
 		const columns = Object.freeze({
 			pid: "pitcher_id",
@@ -60,7 +62,7 @@ class EntryPoint {
 		cleanTable()
 
 		// const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
-		const result = await worker.db.query(`select * from pitchers`);
+		const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
 
 		for (let i = 0; i < result.length; i++) {
 			newRow(result[i])

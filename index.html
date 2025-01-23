@@ -3,16 +3,28 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-		<title>Stuff Simple Simple</title>
+		<title>Stuff Plus Simple</title>
 		<link rel="stylesheet" href="./src/tables.css" />
 		<script src="./dist/bundle.js"></script>
 	</head>
 	<body>
 		<header>
-			<h1>Simple Stuff</h1>
+			<h1>Stuff Plus Simple</h1>
 		</header>
 		<main>
-			<div id="options">
+			<div class="container">
+				<h2>What is Stuff Plus Simple?</h2>
+				<br/>
+				<p>Stuff Plus Simple is a simple stuff plus model. It was built to help me understand how stuff models work. Stuff models try to quantify the value of a pitch solely on its physical attributes. Here is the <a href="https://github.com/enzdor/ss-py">link</a> to the python project that generated all of the data on this website, and here is the <a href="https://github.com/enzdor/stuff-plus-simple">link</a> to the source code of this website. I would not have been able to build this project without the help of these very useful articles:</p>
+				<ul class="list">
+					<li><a href="https://www.prospectslive.com/prospects-live/2023/12/1/an-introduction-to-the-application-of-stuff-models-on-triple-a-data">An Introduction to the Application of Stuff Models on Triple-A Data</a></li>
+					<li><a href="https://www.drivelinebaseball.com/2021/12/what-is-stuff-quantifying-pitches-with-pitch-models/">Pitch Design: What is Stuff+? Quantifying Pitches with Pitch Models</a></li>
+					<li><a href="https://www.drivelinebaseball.com/2024/05/revisiting-stuff-plus/">Revisiting Stuff+: An Update on Driveline’s Methodology to Quantifying Pitch Design</a></li>
+				</ul>
+			</div>
+			<div class="container">
+				<h2>Search</h2>
+				<br/>
 				<label for="pName">Pitcher name:</label>
 				<br/>
 				<input type="text" name="pName" id="pName" placeholder="Tungsten Arm O'Doyle" />
@@ -75,9 +87,7 @@
 			</table>
 		</main>
 		<footer>
-			<ul>
-				<li><a href="/">Source Code</a></li>
-			</ul>
+				<a href="https://github.com/enzdor/stuff-plus-simple">Source Code</a>
 		</footer>
 	</body>
 </html>
