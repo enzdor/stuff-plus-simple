@@ -62,7 +62,14 @@ class EntryPoint {
 		cleanTable()
 
 		// const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
-		const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
+		const result = await worker.db.query(`
+			select * from stuff_plus
+			inner join pitchers
+			on stuff_plus.pitcher_id = pitchers.pitcher_id
+			where pitcher_name like '%${pitcherName}%' 
+			and pitchers.pitcher_id like '%${pitcherId}%' 
+			order by ${columns[sortBy]} ${direction}
+		`);
 
 		for (let i = 0; i < result.length; i++) {
 			newRow(result[i])
