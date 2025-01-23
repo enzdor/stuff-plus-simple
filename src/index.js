@@ -15,7 +15,7 @@ try {
 				from: "inline",
 				config: {
 					serverMode: "full",
-					url: "/stuff-plus-simple/dist/test.db",
+					url: "/dist/test.db",
 					requestChunkSize: 4096,
 				},
 			},
@@ -57,7 +57,8 @@ class EntryPoint {
 
 		cleanTable()
 
-		const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
+		// const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
+		const result = await worker.db.query(`select * from pitchers`);
 
 		for (let i = 0; i < result.length; i++) {
 			newRow(result[i])
