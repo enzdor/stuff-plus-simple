@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Stuff Simple Simple</title>
+		<link rel="stylesheet" href="./src/tables.css" />
+		<script src="./dist/bundle.js"></script>
+	</head>
+	<body>
+		<header>
+			<h1>Simple Stuff</h1>
+		</header>
+		<main>
+			<div id="options">
+				<label for="pName">Pitcher name:</label>
+				<br/>
+				<input type="text" name="pName" id="pName" placeholder="Tungsten Arm O'Doyle" />
+				<br/>
+				<br/>
+				<label for="pName">Pitcher ID:</label>
+				<br/>
+				<input type="number" name="pId" id="pId" placeholder="425794" />
+				<br/>
+				<br/>
+				<label for="sortBy">Sort By:</label>
+				<br/>
+				<select name="sortBy" id="sortBy">
+					<option value="pid">Pitcher ID</option>
+					<option value="pn">Pitcher Name</option>
+					<option value="FF_avg_x_rv100">FF_avg_x_rv100</option>
+					<option value="SI_avg_x_rv100">SI_avg_x_rv100</option>
+					<option value="FC_avg_x_rv100">FC_avg_x_rv100</option>
+					<option value="CH_avg_x_rv100">CH_avg_x_rv100</option>
+					<option value="FS_avg_x_rv100">FS_avg_x_rv100</option>
+					<option value="FO_avg_x_rv100">FO_avg_x_rv100</option>
+					<option value="SC_avg_x_rv100">SC_avg_x_rv100</option>
+					<option value="CU_avg_x_rv100">CU_avg_x_rv100</option>
+					<option value="KC_avg_x_rv100">KC_avg_x_rv100</option>
+					<option value="CS_avg_x_rv100">CS_avg_x_rv100</option>
+					<option value="SL_avg_x_rv100">SL_avg_x_rv100</option>
+					<option value="ST_avg_x_rv100">ST_avg_x_rv100</option>
+					<option value="SV_avg_x_rv100">SV_avg_x_rv100</option>
+					<option value="KN_avg_x_rv100">KN_avg_x_rv100</option>
+				</select>
+				<select name="direction" id="direction">
+				  <option value="DESC">Ascending</option>
+				  <option value="ASC">Descending</option>
+				</select>
+				<br/>
+				<br/>
+				<button onclick="EntryPoint.load()">Load</button>
+				<br/>
+				<br/>
+			</div>
+			<table id="dataTable">
+				<tr>
+					<th>Pitcher ID</th>
+					<th>Name</th>
+					<th>FF</th>
+					<th>SI</th>
+					<th>FC</th>
+					<th>CH</th>
+					<th>FS</th>
+					<th>FO</th>
+					<th>SC</th>
+					<th>CU</th>
+					<th>KC</th>
+					<th>CS</th>
+					<th>SL</th>
+					<th>ST</th>
+					<th>SV</th>
+					<th>KN</th>
+				</tr>
+			</table>
+		</main>
+		<footer>
+			<ul>
+				<li><a href="/">Source Code</a></li>
+			</ul>
+		</footer>
+	</body>
+</html>
+
