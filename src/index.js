@@ -32,23 +32,9 @@ try {
 class EntryPoint {
 	static async load() {
 
-		const pitchType = document.getElementById("pType").value
 		const pitcherName = document.getElementById("pName").value
 		const pitcherId = document.getElementById("pId").value
-		const FF_avg_x_rv100 = document.getElementById("FF_avg_x_rv100").value
-		const SI_avg_x_rv100 = document.getElementById("SI_avg_x_rv100").value
-		const FC_avg_x_rv100 = document.getElementById("FC_avg_x_rv100").value
-		const CH_avg_x_rv100 = document.getElementById("CH_avg_x_rv100").value
-		const FS_avg_x_rv100 = document.getElementById("FS_avg_x_rv100").value
-		const FO_avg_x_rv100 = document.getElementById("FO_avg_x_rv100").value
-		const SC_avg_x_rv100 = document.getElementById("SC_avg_x_rv100").value
-		const CU_avg_x_rv100 = document.getElementById("CU_avg_x_rv100").value
-		const KC_avg_x_rv100 = document.getElementById("KC_avg_x_rv100").value
-		const CS_avg_x_rv100 = document.getElementById("CS_avg_x_rv100").value
-		const SL_avg_x_rv100 = document.getElementById("SL_avg_x_rv100").value
-		const ST_avg_x_rv100 = document.getElementById("ST_avg_x_rv100").value
-		const SV_avg_x_rv100 = document.getElementById("SV_avg_x_rv100").value
-		const KN_avg_x_rv100 = document.getElementById("KN_avg_x_rv100").value
+		const sortBy = document.getElementById("sortBy").value
 
 		const columns = Object.freeze({
 			pid: "pitcher_id",
