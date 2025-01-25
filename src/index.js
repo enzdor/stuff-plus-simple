@@ -39,36 +39,18 @@ class EntryPoint {
 		const pitcherId = document.getElementById("pId").value
 		const sortBy = document.getElementById("sortBy").value
 		const direction = document.getElementById("direction").value
-
-		const columns = Object.freeze({
-			pid: "pitcher_id",
-			pn: "pitcher_name",
-			FF_avg_x_rv100: "FF_avg_x_rv100",
-			SI_avg_x_rv100: "SI_avg_x_rv100",
-			FC_avg_x_rv100: "FC_avg_x_rv100",
-			CH_avg_x_rv100: "CH_avg_x_rv100",
-			FS_avg_x_rv100: "FS_avg_x_rv100",
-			FO_avg_x_rv100: "FO_avg_x_rv100",
-			SC_avg_x_rv100: "SC_avg_x_rv100",
-			CU_avg_x_rv100: "CU_avg_x_rv100",
-			KC_avg_x_rv100: "KC_avg_x_rv100",
-			CS_avg_x_rv100: "CS_avg_x_rv100",
-			SL_avg_x_rv100: "SL_avg_x_rv100",
-			ST_avg_x_rv100: "ST_avg_x_rv100",
-			SV_avg_x_rv100: "SV_avg_x_rv100", 		
-			KN_avg_x_rv100: "KN_avg_x_rv100",
-		})
+		const variable = document.getElementById("variable").value
 
 		cleanTable()
 
 		// const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
 		const result = await worker.db.query(`
-			select * from stuff_plus
+			select * from ${variable}
 			inner join pitchers
-			on stuff_plus.pitcher_id = pitchers.pitcher_id
+			on ${variable}.pitcher_id = pitchers.pitcher_id
 			where pitcher_name like '%${pitcherName}%' 
 			and pitchers.pitcher_id like '%${pitcherId}%' 
-			order by ${columns[sortBy]} ${direction}
+			order by ${sortBy} ${direction}
 		`);
 
 		for (let i = 0; i < result.length; i++) {

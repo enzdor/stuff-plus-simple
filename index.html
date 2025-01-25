@@ -25,6 +25,15 @@
 			<div class="container">
 				<h2>Search</h2>
 				<br/>
+				<label for="sortBy">Variable:</label>
+				<br/>
+				<select name="variable" id="variable">
+					<option value="stuff_plus">Stuff+</option>
+					<option value="location_plus">Location+</option>
+					<!-- <option value="pitching">Pitching</option> -->
+				</select>
+				<br/>
+				<br/>
 				<label for="pName">Pitcher name:</label>
 				<br/>
 				<input type="text" name="pName" id="pName" placeholder="Tungsten Arm O'Doyle" />
@@ -38,8 +47,8 @@
 				<label for="sortBy">Sort By:</label>
 				<br/>
 				<select name="sortBy" id="sortBy">
-					<option value="pid">Pitcher ID</option>
-					<option value="pn">Pitcher Name</option>
+					<option value="pitcher_id">Pitcher ID</option>
+					<option value="pitcher_name">Pitcher Name</option>
 					<option value="FF_avg_x_rv100">FF</option>
 					<option value="SI_avg_x_rv100">SI</option>
 					<option value="FC_avg_x_rv100">FC</option>
