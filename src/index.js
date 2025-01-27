@@ -17,8 +17,8 @@ try {
 					serverMode: "full",
 					// production path is /stuff-plus-simple/dist/test.db
 					// dev path is        /dist/test.db
-					// url: "/dist/test.db",
-					url: "/stuff-plus-simple/dist/test.db",
+					url: "/dist/test.db",
+					// url: "/stuff-plus-simple/dist/test.db",
 					requestChunkSize: 4096,
 				},
 			},
@@ -105,6 +105,8 @@ function newRow(rowValues) {
 	SV_avg_x_rv100.innerHTML = rowValues.SV_avg_x_rv100
 	const KN_avg_x_rv100 = row.insertCell(15)
 	KN_avg_x_rv100.innerHTML = rowValues.KN_avg_x_rv100
+	const ovr = row.insertCell(16)
+	ovr.innerHTML = rowValues.arsenal_avg
 
 }
 
