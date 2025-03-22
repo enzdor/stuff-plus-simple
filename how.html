@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Stuff Plus Simple</title>
+		<link rel="stylesheet" href="./src/tables.css" />
+		<script src="./dist/bundle.js"></script>
+	</head>
+	<body>
+		<header>
+			<h1 id="how-i-built-stuff-plus-simple"><a href="index.html">Stuff Plus Simple</a></h1>
+		</header>
+		<main>
+			<div class="section">
+				<div class="container">
+					<br />
+					<p>In baseball, machine learning is often used to quantify a player&#39;s ability from a range of inputs. In this website, I&#39;m interested in replicating some models that explain a pitcher&#39;s value. Two ways a pitcher&#39;s value can be calculated are stuff and location. I built these models to better understand how this type of models work. Before I start I want to reference some other pages that really helped me to do this:</p>
+					<ul class="list">
+						<li><a href="https://www.prospectslive.com/prospects-live/2023/12/1/an-introduction-to-the-application-of-stuff-models-on-triple-a-data">An Introduction to the Application of Stuff Models on Triple-A Data</a></li>
+						<li><a href="https://www.drivelinebaseball.com/2021/12/what-is-stuff-quantifying-pitches-with-pitch-models/">Pitch Design: What is Stuff+? Quantifying Pitches with Pitch Models</a></li>
+						<li><a href="https://www.drivelinebaseball.com/2024/05/revisiting-stuff-plus/">Revisiting Stuff+: An Update on Driveline’s Methodology to Quantifying Pitch Design</a></li>
+					</ul>
+					<br />
+					<p>I would highly recommend reading these before continuing.</p>
+					<br />
+					<h2 id="what-is-stuff-location-and-pitching-plus-">What is Stuff, Location, and Pitching Plus?</h2>
+					<ul class="list">
+						<li>Stuff plus: it tries to quantify the value of a pitcher&#39;s pitch (one way a pitcher throws the ball) solely on its physical attributes like spin, velocity and release point.</li>
+						<li>Location plus: it tries to quantify the pitcher&#39;s ability to put the pitches in the right place based on the count (the situation).</li>
+						<li>Pitching plus: it tries to quantify the pitcher&#39;s overall pitching ability using the inputs from both stuff and location plus.</li>
+					</ul>
+				</div>
+				<div class="container">
+					<br />
+					<h2 id="data">Data</h2>
+					<br />
+					<p>The data came from Baseball Savant and it was downloaded using a <a href="https://github.com/enzdor/dl-bs">simple</a> script I wrote in Go, this script gives the data for a specific season in csv format. The rows of the csv file are all the pitches thrown during a season and the columns contain the data relating to them. The data that is going to be used are the physical characteristics of a pitch (for stuff plus), the location and count (for location plus) and the delta run expectancy which is the change in run expectancy before and after the specific pitch. The delta run expectancy is the varialbe that we are trying to predict, the &#39;y&#39;, while the other variables would be the &#39;x&#39;s, the regressors.</p>
+					<br />
+					<h2 id="script">Script</h2>
+					<br />
+					<p>The tool that was used to build these models was FLAML&#39;s automl (auto machine learning) which allows me to perform accurate regressions without having to worry about tuning the models. The library that was used for these models was XGBoost because it is widely used. Each of the three models (stuff, location, and pitching) is subdivided into three different groups according to pitch types: fastball, offspeed, and breaking. These three different general pitch type groups allow similar pitches to be compared to each other instead of being compared to pitches that are very different. For example, a four-seam fastball (a very fast pitch with little vertical and horizontal movement) will be compared to a two-seamer (a very fast pitch with some vertical and horizontal movement) but will not be compared to a curveball (slow pitch with lots of vertical movement) or a slider (slow pitch with lots of horizontal and vertical movement).</p>
+					<br />
+					<p>The script can be subdivided into three general parts:</p>
+					<ol class="list">
+						<li>Loading data: here the script takes the csv file and will create lists where the results will be saved to.</li>
+						<li>Performing calculations: here is the part where automl is called and the regression is performed for each model. After this, a pitcher&#39;s pitch type value is calculated and the pitcher&#39;s arsenal value is also calculated.</li>
+						<li>Storing the data: all of the results are finally saved to a sqlite file with a summary file accompanying it.</li>
+					</ol>
+					<br />
+					<p>You can find the source code for the script <a href="!https://github.com/enzdor/ss-py/">here</a>, you will find that there are some comments trying to explain what happens in each block of code.</p>
+				</div>
+				<div class="container">
+					<h2 id="results">Results</h2>
+					<br />
+					<p>All of the stuff, location, and pitching plus values for each pitcher can be seen in the home page of this website.</p>
+					<br />
+					<p>First of all we are going to look at the R^2 of the different models, which shows how well does the model explain the &#39;y&#39;, which in our case would be how well does the model explain either, stuff, location or pitching plus.</p>
+					<br />
+					<table>
+						<thead>
+						<tr>
+							<th></th>
+							<th>Stuff</th>
+							<th>Location</th>
+							<th>Pitching</th>
+						</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Fastballs</td>
+								<td>0.078</td>
+								<td>0.039</td>
+								<td>0.053</td>
+							</tr>
+							<tr>
+								<td>Breaking Balls</td>
+								<td>0.028</td>
+								<td>0.056</td>
+								<td>0.069</td>
+							</tr>
+							<tr>
+								<td>Offspeed</td>
+								<td>0.020</td>
+								<td>0.025</td>
+								<td>0.131</td>
+							</tr>
+						</tbody>
+					</table>
+					<br />
+					<p>As we can see from the table above which contains the R^2 for each of the models, the models are not very good at explaining the &#39;y&#39; which in our case is the delta run expectancy.</p>
+					<br />
+					<p>The second statistic we are going to look at is the stickiness of the stuff, location, and pitching plus. This is done by running a simple regression of the 2023 on the 2024, meaning we are trying to explain the results of the 2024 with the results of the 2023 to see how predictive the models are season to season.</p>
+					<br />
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+								<th>Stuff</th>
+								<th>Location</th>
+								<th>Pitching</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>2023 on 2024 R^2</td>
+								<td>-0.75</td>
+								<td>-0.50</td>
+								<td>-0.48</td>
+							</tr>
+						</tbody>
+					</table>
+					<br />
+					<p>In the table above, we can see that all of the R^2 are negative. This means that the values of the 2023 are worse at predicting the values of the 2024 season than the mean of the 2024 season, this is very bad. Below we can see some plots that show the relationships of the two seasons.</p>
+					<div class="image-gallery">
+						<div class="image-container">
+							<img src="./src/stuff_2324.png" alt="Plot showing stuff plus for 2024 in the y axis and for 2023 in x axis, points for the corresponding observations in the plot." \>
+						</div>
+						<div class="image-container">
+							<img src="./src/location_2324.png" alt="Plot showing location plus for 2024 in the y axis and for 2023 in x axis, points for the corresponding observations in the plot." \>
+						</div>
+						<div class="image-container">
+							<img src="./src/pitching_2324.png" alt="Plot showing pitching plus for 2024 in the y axis and for 2023 in x axis, and points representing the observations in the plot." \>
+						</div>
+					</div>
+					<br />
+					<p>Lastly, we are going to take a look at the feature importance for the stuff model, how significant is the effect of independent variable is on the dependent variable. We are going to do this only for the stuff model.</p>
+					<br />
+					<div class="image-gallery">
+						<div class="image-container">
+							<img src="./src/fastball_importance_2024.png" alt="A histogram showing the importance of the different independent variables of the stuff plus model for fastballs for the 2024 season." \>
+						</div>
+						<div class="image-container">
+							<img src="./src/offspeed_importance_2024.png" alt="A histogram showing the importance of the different independent variables of the stuff plus model for offspeed pitches for the 2024 season." \>
+						</div>
+						<div class="image-container">
+							<img src="./src/breaking_ball_importance_2024.png" alt="A histogram showing the importance of the different independent variables of the stuff plus model for breaking balls for the 2024 season." \>
+						</div>
+					</div>
+					<br />
+					<p>In general, the three most relevant independent variables are release_pos_x, release_pos_z, vx0, vy0, and vz0. Below I provide a sketch with the axis, for you to better understand. release_pos is from where the ball is released while the &#39;v&#39; variables are the velocities of the pitch, in feet per second determined at y=50 feet. This shows that the models are most concerned with velocity and release point.</p>
+					<br />
+						<div class="image-container">
+							<img src="./src/xyz.png" alt="Sketch showing y axis is from pitcher to catcher, x axis is from 3rd to second base and z axis is from floor to the sky." \>
+						</div>
+					<br />
+					<p>You can find out what all of the independent variables are in this <a href="https://baseballsavant.mlb.com/csv-docs">link</a>. Below I will provide plots that show the relationship of the main five independent variables against the stuff, location, or pitching plus for each of the three different pitch type groups.</p>
+				</div>
+				<div class="container">
+					<h2 id="conclusion">Conclusion</h2>
+					<br />
+					<p>There is not much that we can deduce from these results as these are very imperfect models. There are things that can be done to improve them. The first thing that should be tested is, instead of creating different models for each pitch type group, all of the pitches should be grouped together, this may give more accurate results. Also, include pitcher handedness and adjust the release_pos_x variable accordingly. Moreover, the time budget could be increased from 1 hour. Finally, I think I could create better graphs to show the data.</p>
+					<br />
+					<p>I can say that this was a very good project, even if the results are very inaccurate. It allowed me to:</p>
+					<ul class="list">
+						<li>to learn to use automl tools</li>
+						<li>get a deeper understanding of python (even if it isn&#39;t my favourite language)</li>
+						<li>get a deeper understanding of stuff models</li>
+						<li>improve my sql knowledge</li>
+						<li>apply some of my econometric knowledge</li>
+					</ul>
+				</div>
+				<div class="container">
+					<h2 id="gallery">Independent Variable Plots</h2>
+					<br />
+					<div class="image-gallery">
+						<div class="image-container">
+							<img src="./src/rel_pos_x-sp-breaking.png" alt="Stuff plus on the y axis rel_pos_x on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/rel_pos_x-sp-fastballs.png" alt="Stuff plus on the y axis rel_pos_x on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/rel_pos_x-sp-offspeed.png" alt="Stuff plus on the y axis rel_pos_x on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/rel_pos_z-sp-breaking.png" alt="Stuff plus on the y axis rel_pos_z on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/rel_pos_z-sp-fastballs.png" alt="Stuff plus on the y axis rel_pos_z on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/rel_pos_z-sp-offspeed.png" alt="Stuff plus on the y axis rel_pos_z on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vx0-sp-breaking.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vx0-sp-fastballs.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vx0-sp-offspeed.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vy0-sp-breaking.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vy0-sp-fastballs.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vy0-sp-offspeed.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vz0-sp-breaking.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vz0-sp-fastballs.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
+						</div>
+						<div class="image-container">
+							<img src="./src/vz0-sp-offspeed.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</main>
+		<footer>
+				<a href="https://github.com/enzdor/stuff-plus-simple">Source Code</a>
+				<br />
+				<a href="how.html">How</a>
+				<br />
+				<a href="index.html">Home</a>
+		</footer>
+	</body>
+</html>
+
+
+
+
+
+
+

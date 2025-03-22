@@ -40,6 +40,7 @@ class EntryPoint {
 		const sortBy = document.getElementById("sortBy").value
 		const direction = document.getElementById("direction").value
 		const variable = document.getElementById("variable").value
+		const season = document.getElementById("season").value
 
 		cleanTable()
 
@@ -49,6 +50,7 @@ class EntryPoint {
 			inner join pitchers
 			on ${variable}.pitcher_id = pitchers.pitcher_id
 			where pitcher_name like '%${pitcherName}%' 
+			and season like '%${season}%'
 			and pitchers.pitcher_id like '%${pitcherId}%' 
 			order by ${sortBy} ${direction}
 		`);
@@ -107,6 +109,8 @@ function newRow(rowValues) {
 	KN_avg_x_rv100.innerHTML = rowValues.KN_avg_x_rv100
 	const ovr = row.insertCell(16)
 	ovr.innerHTML = rowValues.arsenal_avg
+	const seasonYear = row.insertCell(17)
+	seasonYear.innerHTML = rowValues.season
 
 }
 

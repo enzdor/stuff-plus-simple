@@ -9,71 +9,85 @@
 	</head>
 	<body>
 		<header>
-			<h1>Stuff Plus Simple</h1>
+			<h1><a href="index.html">Stuff Plus Simple</a></h1>
 		</header>
 		<main>
-			<div class="container">
-				<h2>What is Stuff Plus Simple?</h2>
-				<br/>
-				<p>Stuff Plus Simple is a simple stuff plus model. It was built to help me understand how stuff models work. Stuff models try to quantify the value of a pitch solely on its physical attributes. Here is the <a href="https://github.com/enzdor/ss-py">link</a> to the python project that generated all of the data on this website, and here is the <a href="https://github.com/enzdor/stuff-plus-simple">link</a> to the source code of this website. I would not have been able to build this project without the help of these very useful articles:</p>
-				<ul class="list">
-					<li><a href="https://www.prospectslive.com/prospects-live/2023/12/1/an-introduction-to-the-application-of-stuff-models-on-triple-a-data">An Introduction to the Application of Stuff Models on Triple-A Data</a></li>
-					<li><a href="https://www.drivelinebaseball.com/2021/12/what-is-stuff-quantifying-pitches-with-pitch-models/">Pitch Design: What is Stuff+? Quantifying Pitches with Pitch Models</a></li>
-					<li><a href="https://www.drivelinebaseball.com/2024/05/revisiting-stuff-plus/">Revisiting Stuff+: An Update on Driveline’s Methodology to Quantifying Pitch Design</a></li>
-				</ul>
-			</div>
-			<div class="container">
-				<h2>Search</h2>
-				<br/>
-				<label for="sortBy">Variable:</label>
-				<br/>
-				<select name="variable" id="variable">
-					<option value="stuff_plus">Stuff+</option>
-					<option value="location_plus">Location+</option>
-					<option value="pitching_plus">Pitching+</option>
-				</select>
-				<br/>
-				<br/>
-				<label for="pName">Pitcher name:</label>
-				<br/>
-				<input type="text" name="pName" id="pName" placeholder="Tungsten Arm O'Doyle" />
-				<br/>
-				<br/>
-				<label for="pName">Pitcher ID:</label>
-				<br/>
-				<input type="number" name="pId" id="pId" placeholder="425794" />
-				<br/>
-				<br/>
-				<label for="sortBy">Sort By:</label>
-				<br/>
-				<select name="sortBy" id="sortBy">
-					<option value="pitcher_id">Pitcher ID</option>
-					<option value="pitcher_name">Pitcher Name</option>
-					<option value="FF_avg_x_rv100">FF</option>
-					<option value="SI_avg_x_rv100">SI</option>
-					<option value="FC_avg_x_rv100">FC</option>
-					<option value="CH_avg_x_rv100">CH</option>
-					<option value="FS_avg_x_rv100">FS</option>
-					<option value="FO_avg_x_rv100">FO</option>
-					<option value="SC_avg_x_rv100">SC</option>
-					<option value="CU_avg_x_rv100">CU</option>
-					<option value="KC_avg_x_rv100">KC</option>
-					<option value="CS_avg_x_rv100">CS</option>
-					<option value="SL_avg_x_rv100">SL</option>
-					<option value="ST_avg_x_rv100">ST</option>
-					<option value="SV_avg_x_rv100">SV</option>
-					<option value="KN_avg_x_rv100">KN</option>
-					<option value="arsenal_avg">OVR</option>
-				</select>
-				<select name="direction" id="direction">
-				  <option value="DESC">Ascending</option>
-				  <option value="ASC">Descending</option>
-				</select>
-				<br/>
-				<br/>
-				<button onclick="EntryPoint.load()">Load</button>
-				<br/>
-				<br/>
+			<div class="section">
+				<div class="container">
+					<h2>What is Stuff Plus Simple?</h2>
+					<br/>
+					<p>Stuff Plus Simple is a simple stuff plus model. It was built to help me understand how stuff models work. Stuff models try to quantify the value of a pitch solely on its physical attributes. Here is the <a href="https://github.com/enzdor/ss-py">link</a> to the python project that generated all of the data on this website, and here is the <a href="https://github.com/enzdor/stuff-plus-simple">link</a> to the source code of this website. I would not have been able to build this project without the help of these very useful articles:</p>
+					<ul class="list">
+						<li><a href="https://www.prospectslive.com/prospects-live/2023/12/1/an-introduction-to-the-application-of-stuff-models-on-triple-a-data">An Introduction to the Application of Stuff Models on Triple-A Data</a></li>
+						<li><a href="https://www.drivelinebaseball.com/2021/12/what-is-stuff-quantifying-pitches-with-pitch-models/">Pitch Design: What is Stuff+? Quantifying Pitches with Pitch Models</a></li>
+						<li><a href="https://www.drivelinebaseball.com/2024/05/revisiting-stuff-plus/">Revisiting Stuff+: An Update on Driveline’s Methodology to Quantifying Pitch Design</a></li>
+					</ul>
+					<br />
+					<p>If you want a more in-depth explation on how this was built, click <a href="how.html">here!<a/></p>
+				</div>
+				<div class="container">
+					<h2>Search</h2>
+					<br/>
+					<label for="sortBy">Variable:</label>
+					<br/>
+					<select name="variable" id="variable">
+						<option value="stuff_plus">Stuff+</option>
+						<option value="location_plus">Location+</option>
+						<option value="pitching_plus">Pitching+</option>
+					</select>
+					<br/>
+					<br/>
+					<label for="sortBy">Season:</label>
+					<br/>
+					<select name="season" id="season">
+						<option value="">Any</option>
+						<option value="2024">2024</option>
+						<option value="2023">2023</option>
+					</select>
+					<br/>
+					<br/>
+					<label for="pName">Pitcher name:</label>
+					<br/>
+					<input type="text" name="pName" id="pName" placeholder="Tungsten Arm O'Doyle" />
+					<br/>
+					<br/>
+					<label for="pName">Pitcher ID:</label>
+					<br/>
+					<input type="number" name="pId" id="pId" placeholder="425794" />
+					<br/>
+					<br/>
+					<label for="sortBy">Sort By:</label>
+					<br/>
+					<select name="sortBy" id="sortBy">
+						<option value="pitcher_id">Pitcher ID</option>
+						<option value="pitcher_name">Pitcher Name</option>
+						<option value="FF_avg_x_rv100">FF</option>
+						<option value="SI_avg_x_rv100">SI</option>
+						<option value="FC_avg_x_rv100">FC</option>
+						<option value="CH_avg_x_rv100">CH</option>
+						<option value="FS_avg_x_rv100">FS</option>
+						<option value="FO_avg_x_rv100">FO</option>
+						<option value="SC_avg_x_rv100">SC</option>
+						<option value="CU_avg_x_rv100">CU</option>
+						<option value="KC_avg_x_rv100">KC</option>
+						<option value="CS_avg_x_rv100">CS</option>
+						<option value="SL_avg_x_rv100">SL</option>
+						<option value="ST_avg_x_rv100">ST</option>
+						<option value="SV_avg_x_rv100">SV</option>
+						<option value="KN_avg_x_rv100">KN</option>
+						<option value="arsenal_avg">OVR</option>
+						<option value="season">Season</option>
+					</select>
+					<select name="direction" id="direction">
+					  <option value="DESC">Ascending</option>
+					  <option value="ASC">Descending</option>
+					</select>
+					<br/>
+					<br/>
+					<button onclick="EntryPoint.load()">Load</button>
+					<br/>
+					<br/>
+				</div>
 			</div>
 			<table id="dataTable">
 				<tr>
@@ -94,11 +108,16 @@
 					<th>SV</th>
 					<th>KN</th>
 					<th>OVR</th>
+					<th>Season</th>
 				</tr>
 			</table>
 		</main>
 		<footer>
 				<a href="https://github.com/enzdor/stuff-plus-simple">Source Code</a>
+				<br />
+				<a href="how.html">How</a>
+				<br />
+				<a href="index.html">Home</a>
 		</footer>
 	</body>
 </html>
