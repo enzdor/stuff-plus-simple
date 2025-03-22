@@ -24,42 +24,54 @@
 					</ul>
 					<br />
 					<p>If you want a more in-depth explation on how this was built, click <a href="how.html">here!<a/></p>
+					<br />
+					<br />
+					<h2>Choose (click on) one of the three tables to browse through...
 				</div>
-				<div class="container">
-					<h2>Search</h2>
+				<div id="search-options">
+					<div class="container h-search" id="h-plus-search" onclick="EntryPoint.hideRest('plus-search')">
+						<h3>1. Stuff, Location and Pitching Plus</h3>
+					</div>
+					<div class="container h-search" id="h-number-search" onclick="EntryPoint.hideRest('number-search')">
+						<h3>2. Number of Pitches Thrown</h3>
+					</div>
+					<div class="container h-search" id="h-regressor-search" onclick="EntryPoint.hideRest('regressor-search')">
+						<h3>3. Stuff Independent Variables</h3>
+					</div>
+				</div>
+				<div class="container" id="plus-search">
+					<label for="variablePlus">Variable:</label>
 					<br/>
-					<label for="sortBy">Variable:</label>
-					<br/>
-					<select name="variable" id="variable">
+					<select name="variablePlus" id="variablePlus">
 						<option value="stuff_plus">Stuff+</option>
 						<option value="location_plus">Location+</option>
 						<option value="pitching_plus">Pitching+</option>
 					</select>
 					<br/>
 					<br/>
-					<label for="sortBy">Season:</label>
+					<label for="seasonPlus">Season:</label>
 					<br/>
-					<select name="season" id="season">
-						<option value="">Any</option>
+					<select name="seasonPlus" id="seasonPlus">
+						<option value="">All</option>
 						<option value="2024">2024</option>
 						<option value="2023">2023</option>
 						<option value="2022">2022</option>
 					</select>
 					<br/>
 					<br/>
-					<label for="pName">Pitcher name:</label>
+					<label for="pNamePlus">Pitcher name:</label>
 					<br/>
-					<input type="text" name="pName" id="pName" placeholder="Tungsten Arm O'Doyle" />
-					<br/>
-					<br/>
-					<label for="pName">Pitcher ID:</label>
-					<br/>
-					<input type="number" name="pId" id="pId" placeholder="425794" />
+					<input type="text" name="pNamePlus" id="pNamePlus" placeholder="Tungsten Arm O'Doyle" />
 					<br/>
 					<br/>
-					<label for="sortBy">Sort By:</label>
+					<label for="pIdPlus">Pitcher ID:</label>
 					<br/>
-					<select name="sortBy" id="sortBy">
+					<input type="number" name="pIdPlus" id="pIdPlus" placeholder="425794" />
+					<br/>
+					<br/>
+					<label for="sortByPlus">Sort By:</label>
+					<br/>
+					<select name="sortByPlus" id="sortByPlus">
 						<option value="pitcher_id">Pitcher ID</option>
 						<option value="pitcher_name">Pitcher Name</option>
 						<option value="FF_avg_x_rv100">FF</option>
@@ -79,39 +91,225 @@
 						<option value="arsenal_avg">OVR</option>
 						<option value="season">Season</option>
 					</select>
-					<select name="direction" id="direction">
+					<select name="directionPlus" id="directionPlus">
 					  <option value="DESC">Ascending</option>
 					  <option value="ASC">Descending</option>
 					</select>
 					<br/>
 					<br/>
-					<button onclick="EntryPoint.load()">Load</button>
+					<label for="minimumNPlus">Minimum Number of Pitches Thrown:</label>
+					<br/>
+					<input type="number" name="minimumNPlus" id="minimumNPlus" placeholder="0" required/>
 					<br/>
 					<br/>
+					<button onclick="EntryPoint.loadPlus()">Load</button>
+					<br/>
+					<br/>
+					<table id="dataTablePlus">
+						<tr>
+							<th>Pitcher ID</th>
+							<th>Name</th>
+							<th>FF</th>
+							<th>SI</th>
+							<th>FC</th>
+							<th>CH</th>
+							<th>FS</th>
+							<th>FO</th>
+							<th>SC</th>
+							<th>CU</th>
+							<th>KC</th>
+							<th>CS</th>
+							<th>SL</th>
+							<th>ST</th>
+							<th>SV</th>
+							<th>KN</th>
+							<th>OVR</th>
+							<th>Season</th>
+						</tr>
+					</table>
+				</div>
+				<div class="container" id="number-search">
+					<label for="variableNumber">Variable: Number of Pitches Thrown</label>
+					<br/>
+					<br/>
+					<label for="seasonNumber">Season:</label>
+					<br/>
+					<select name="seasonNumber" id="seasonNumber">
+						<option value="">Any</option>
+						<option value="2024">2024</option>
+						<option value="2023">2023</option>
+						<option value="2022">2022</option>
+					</select>
+					<br/>
+					<br/>
+					<label for="pNameNumber">Pitcher name:</label>
+					<br/>
+					<input type="text" name="pNameNumber" id="pNameNumber" placeholder="Tungsten Arm O'Doyle" />
+					<br/>
+					<br/>
+					<label for="pIdNumber">Pitcher ID:</label>
+					<br/>
+					<input type="number" name="pIdNumber" id="pIdNumber" placeholder="425794" />
+					<br/>
+					<br/>
+					<label for="sortByNumber">Sort By:</label>
+					<br/>
+					<select name="sortByNumber" id="sortByNumber">
+						<option value="pitcher_id">Pitcher ID</option>
+						<option value="pitcher_name">Pitcher Name</option>
+						<option value="FF_n">FF</option>
+						<option value="SI_n">SI</option>
+						<option value="FC_n">FC</option>
+						<option value="CH_n">CH</option>
+						<option value="FS_n">FS</option>
+						<option value="FO_n">FO</option>
+						<option value="SC_n">SC</option>
+						<option value="CU_n">CU</option>
+						<option value="KC_n">KC</option>
+						<option value="CS_n">CS</option>
+						<option value="SL_n">SL</option>
+						<option value="ST_n">ST</option>
+						<option value="SV_n">SV</option>
+						<option value="KN_n">KN</option>
+						<option value="N">OVR</option>
+						<option value="season">Season</option>
+					</select>
+					<select name="directionNumber" id="directionNumber">
+					  <option value="DESC">Ascending</option>
+					  <option value="ASC">Descending</option>
+					</select>
+					<br/>
+					<br/>
+					<button onclick="EntryPoint.loadNumber()">Load</button>
+					<br/>
+					<br/>
+					<table id="dataTableNumber">
+						<tr>
+							<th>Pitcher ID</th>
+							<th>Name</th>
+							<th>FF</th>
+							<th>SI</th>
+							<th>FC</th>
+							<th>CH</th>
+							<th>FS</th>
+							<th>FO</th>
+							<th>SC</th>
+							<th>CU</th>
+							<th>KC</th>
+							<th>CS</th>
+							<th>SL</th>
+							<th>ST</th>
+							<th>SV</th>
+							<th>KN</th>
+							<th>OVR</th>
+							<th>Season</th>
+						</tr>
+					</table>
+				</div>
+				<div class="container" id="regressor-search">
+					<label for="variable">Variable: stuff plus regressor averages</label>
+					<br/>
+					<br/>
+					<label for="seasonRegressor">Season:</label>
+					<br/>
+					<select name="seasonRegressor" id="seasonRegressor">
+						<option value="">Any</option>
+						<option value="2024">2024</option>
+						<option value="2023">2023</option>
+						<option value="2022">2022</option>
+					</select>
+					<br/>
+					<br/>
+					<label for="pNameRegressor">Pitcher name:</label>
+					<br/>
+					<input type="text" name="pNameRegressor" id="pNameRegressor" placeholder="Tungsten Arm O'Doyle" />
+					<br/>
+					<br/>
+					<label for="pIdRegressor">Pitcher ID:</label>
+					<br/>
+					<input type="number" name="pIdRegressor" id="pIdRegressor" placeholder="425794" />
+					<br/>
+					<br/>
+					<label for="sortByRegressor">Sort By:</label>
+					<br/>
+					<select name="sortByRegressor" id="sortByRegressor">
+						<option value="pitcher_id">Pitcher ID</option>
+						<option value="pitcher_name">Pitcher Name</option>
+						<option value="pitch_type">Pitch Type</option>
+						<option value="release_speed">release_speed</option>
+						<option value="release_pos_x">release_pos_x</option>
+						<option value="release_pos_y">release_pos_y</option>
+						<option value="release_pos_z">release_pos_z</option>
+						<option value="pfx_x">pfx_x</option>
+						<option value="pfx_z">pfx_z</option>
+						<option value="vx0">vx0</option>
+						<option value="vy0">vy0</option>
+						<option value="vz0">vz0</option>
+						<option value="ax">ax</option>
+						<option value="ay">ay</option>
+						<option value="az">az</option>
+						<option value="release_spin_rate">release_spin_rate</option>
+						<option value="spin_axis">spin_axis</option>
+						<option value="release_extension">release_extension</option>
+						<option value="stuff_plus">stuff_plus</option>
+						<option value="season">Season</option>
+					</select>
+					<select name="directionRegressor" id="directionRegressor">
+					  <option value="DESC">Ascending</option>
+					  <option value="ASC">Descending</option>
+					</select>
+					<br/>
+					<br/>
+					<label for="pitchTypeRegressor">Pitch Type</label>
+					<br/>
+					<select name="pitchTypeRegressor" id="pitchTypeRegressor">
+						<option value="">All</option>
+						<option value="FF">FF</option>
+						<option value="SI">SI</option>
+						<option value="FC">FC</option>
+						<option value="CH">CH</option>
+						<option value="FS">FS</option>
+						<option value="FO">FO</option>
+						<option value="SC">SC</option>
+						<option value="CU">CU</option>
+						<option value="KC">KC</option>
+						<option value="CS">CS</option>
+						<option value="SL">SL</option>
+						<option value="ST">ST</option>
+						<option value="SV">SV</option>
+						<option value="KN">KN</option>
+					</select>
+					<br/>
+					<br/>
+					<button onclick="EntryPoint.loadRegressor()">Load</button>
+					<br/>
+					<br/>
+					<table id="dataTableRegressor">
+						<tr>
+							<th>Pitcher ID</th>
+							<th>Name</th>
+							<th>Type</th>
+							<th>release_speed</th>
+							<th>release_pos_x</th>
+							<th>release_pos_y</th>
+							<th>release_pos_z</th>
+							<th>pfx_x</th>
+							<th>pfx_z</th>
+							<th>vx0</th>
+							<th>vy0</th>
+							<th>vz0</th>
+							<th>ax</th>
+							<th>ay</th>
+							<th>az</th>
+							<th>release_spin_rate</th>
+							<th>spin_axis</th>
+							<th>release_extension</th>
+							<th>stuff_plus</th>
+							<th>season</th>
+						</tr>
+					</table>
 				</div>
 			</div>
-			<table id="dataTable">
-				<tr>
-					<th>Pitcher ID</th>
-					<th>Name</th>
-					<th>FF</th>
-					<th>SI</th>
-					<th>FC</th>
-					<th>CH</th>
-					<th>FS</th>
-					<th>FO</th>
-					<th>SC</th>
-					<th>CU</th>
-					<th>KC</th>
-					<th>CS</th>
-					<th>SL</th>
-					<th>ST</th>
-					<th>SV</th>
-					<th>KN</th>
-					<th>OVR</th>
-					<th>Season</th>
-				</tr>
-			</table>
 		</main>
 		<footer>
 				<a href="https://github.com/enzdor/stuff-plus-simple">Source Code</a>

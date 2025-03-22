@@ -33,16 +33,20 @@ try {
 
 
 class EntryPoint {
-	static async load() {
+	static async loadPlus() {
 
-		const pitcherName = document.getElementById("pName").value
-		const pitcherId = document.getElementById("pId").value
-		const sortBy = document.getElementById("sortBy").value
-		const direction = document.getElementById("direction").value
-		const variable = document.getElementById("variable").value
-		const season = document.getElementById("season").value
+		const pitcherName = document.getElementById("pNamePlus").value
+		const pitcherId = document.getElementById("pIdPlus").value
+		const sortBy = document.getElementById("sortByPlus").value
+		const direction = document.getElementById("directionPlus").value
+		const variable = document.getElementById("variablePlus").value
+		const season = document.getElementById("seasonPlus").value
+		let minimumN = document.getElementById("minimumNPlus").value
+		if (minimumN == "") {
+			minimumN = "0"
+		}
 
-		cleanTable()
+		cleanTable('dataTablePlus')
 
 		// const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
 		const result = await worker.db.query(`
@@ -52,18 +56,93 @@ class EntryPoint {
 			where pitcher_name like '%${pitcherName}%' 
 			and season like '%${season}%'
 			and pitchers.pitcher_id like '%${pitcherId}%' 
+			and N > ${minimumN}
 			order by ${sortBy} ${direction}
 		`);
 
 		for (let i = 0; i < result.length; i++) {
-			newRow(result[i])
+			newRowPlus(result[i])
 		}
 		return
 	}
+
+	static async loadNumber() {
+
+		const pitcherName = document.getElementById("pNameNumber").value
+		const pitcherId = document.getElementById("pIdNumber").value
+		const sortBy = document.getElementById("sortByNumber").value
+		const direction = document.getElementById("directionNumber").value
+		const season = document.getElementById("seasonNumber").value
+
+		cleanTable('dataTableNumber')
+
+		// const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
+		const result = await worker.db.query(`
+			select * from stuff_plus
+			inner join pitchers
+			on stuff_plus.pitcher_id = pitchers.pitcher_id
+			where pitcher_name like '%${pitcherName}%' 
+			and season like '%${season}%'
+			and pitchers.pitcher_id like '%${pitcherId}%' 
+			order by ${sortBy} ${direction}
+		`);
+
+		for (let i = 0; i < result.length; i++) {
+			newRowNumber(result[i])
+		}
+		return
+	}
+
+	static async loadRegressor() {
+
+		const pitcherName = document.getElementById("pNameRegressor").value
+		const pitcherId = document.getElementById("pIdRegressor").value
+		const sortBy = document.getElementById("sortByRegressor").value
+		const direction = document.getElementById("directionRegressor").value
+		const season = document.getElementById("seasonRegressor").value
+		const pitchType = document.getElementById("pitchTypeRegressor").value
+
+		cleanTable('dataTableRegressor')
+
+		// const result = await worker.db.query(`select * from pitchers where pitcher_name like '%${pitcherName}%' and pitcher_id like '%${pitcherId}%' order by ${columns[sortBy]} ${direction}`);
+		const result = await worker.db.query(`
+			select * from stuff_regressors
+			inner join pitchers
+			on stuff_regressors.pitcher_id = pitchers.pitcher_id
+			where pitcher_name like '%${pitcherName}%' 
+			and season like '%${season}%'
+			and pitch_type like '%${pitchType}%'
+			and pitchers.pitcher_id like '%${pitcherId}%' 
+			order by ${sortBy} ${direction}
+		`);
+
+		for (let i = 0; i < result.length; i++) {
+			newRowRegressor(result[i])
+		}
+		return
+	}
+
+	static hideRest(toNotHide) {
+		let not = document.getElementById(toNotHide)
+		let titleNot = document.getElementById('h-' + toNotHide)
+		not.style.display = "block";
+		titleNot.style.color = "blue";
+
+		const opts = ['plus-search', 'number-search', 'regressor-search']
+		const index = opts.indexOf(toNotHide)
+		opts.splice(index, 1)
+
+		for (let i in opts) {
+			let theDiv = document.getElementById(opts[i])
+			let titletheDiv = document.getElementById('h-' + opts[i])
+			theDiv.style.display = "none";
+			titletheDiv.style.color = "black";
+		}
+	}
 }
 
-function cleanTable() {
-	const table = document.getElementById("dataTable")
+function cleanTable(tableName) {
+	const table = document.getElementById(tableName)
 
 	while (table.rows.length > 1) {
 		table.deleteRow(1)
@@ -71,8 +150,8 @@ function cleanTable() {
 }
 
 
-function newRow(rowValues) {
-	const table = document.getElementById("dataTable")
+function newRowPlus(rowValues) {
+	const table = document.getElementById('dataTablePlus')
 	const row = table.insertRow(1)
 
 	const id = row.insertCell(0)
@@ -114,8 +193,97 @@ function newRow(rowValues) {
 
 }
 
-window.EntryPoint = EntryPoint
+function newRowNumber(rowValues) {
+	const table = document.getElementById('dataTableNumber')
+	const row = table.insertRow(1)
 
+	const id = row.insertCell(0)
+	id.innerHTML = rowValues.pitcher_id
+	const name = row.insertCell(1)
+	name.innerHTML = rowValues.pitcher_name
+	const FF_n = row.insertCell(2)
+	FF_n.innerHTML = rowValues.FF_n
+	const SI_n = row.insertCell(3)
+	SI_n.innerHTML = rowValues.SI_n
+	const FC_n = row.insertCell(4)
+	FC_n.innerHTML = rowValues.FC_n
+	const CH_n = row.insertCell(5)
+	CH_n.innerHTML = rowValues.CH_n
+	const FS_n = row.insertCell(6)
+	FS_n.innerHTML = rowValues.FS_n
+	const FO_n = row.insertCell(7)
+	FO_n.innerHTML = rowValues.FO_n
+	const SC_n = row.insertCell(8)
+	SC_n.innerHTML = rowValues.SC_n
+	const CU_n = row.insertCell(9)
+	CU_n.innerHTML = rowValues.CU_n
+	const KC_n = row.insertCell(10)
+	KC_n.innerHTML = rowValues.KC_n
+	const CS_n = row.insertCell(11)
+	CS_n.innerHTML = rowValues.CS_n
+	const SL_n = row.insertCell(12)
+	SL_n.innerHTML = rowValues.SL_n
+	const ST_n = row.insertCell(13)
+	ST_n.innerHTML = rowValues.ST_n
+	const SV_n = row.insertCell(14)
+	SV_n.innerHTML = rowValues.SV_n
+	const KN_n = row.insertCell(15)
+	KN_n.innerHTML = rowValues.KN_n
+	const N = row.insertCell(16)
+	N.innerHTML = rowValues.N
+	const seasonYear = row.insertCell(17)
+	seasonYear.innerHTML = rowValues.season
+
+}
+
+function newRowRegressor(rowValues) {
+	const table = document.getElementById('dataTableRegressor')
+	const row = table.insertRow(1)
+
+	const pitcherId = row.insertCell(0);
+	pitcherId.innerHTML = rowValues.pitcher_id;
+	const name = row.insertCell(1);
+	name.innerHTML = rowValues.pitcher_name;
+	const pitchType = row.insertCell(2);
+	pitchType.innerHTML = rowValues.pitch_type;
+	const releaseSpeed = row.insertCell(3);
+	releaseSpeed.innerHTML = rowValues.release_speed;
+	const releasePosX = row.insertCell(4);
+	releasePosX.innerHTML = rowValues.release_pos_x;
+	const releasePosY = row.insertCell(5);
+	releasePosY.innerHTML = rowValues.release_pos_y;
+	const releasePosZ = row.insertCell(6);
+	releasePosZ.innerHTML = rowValues.release_pos_z;
+	const pfxX = row.insertCell(7);
+	pfxX.innerHTML = rowValues.pfx_x;
+	const pfxZ = row.insertCell(8);
+	pfxZ.innerHTML = rowValues.pfx_z;
+	const vx0 = row.insertCell(9);
+	vx0.innerHTML = rowValues.vx0;
+	const vy0 = row.insertCell(10);
+	vy0.innerHTML = rowValues.vy0;
+	const vz0 = row.insertCell(11);
+	vz0.innerHTML = rowValues.vz0;
+	const ax = row.insertCell(12);
+	ax.innerHTML = rowValues.ax;
+	const ay = row.insertCell(13);
+	ay.innerHTML = rowValues.ay;
+	const az = row.insertCell(14);
+	az.innerHTML = rowValues.az;
+	const releaseSpinRate = row.insertCell(15);
+	releaseSpinRate.innerHTML = rowValues.release_spin_rate;
+	const spinAxis = row.insertCell(16);
+	spinAxis.innerHTML = rowValues.spin_axis;
+	const releaseExtension = row.insertCell(17);
+	releaseExtension.innerHTML = rowValues.release_extension;
+	const stuffPlus = row.insertCell(18);
+	stuffPlus.innerHTML = rowValues.stuff_plus;
+	const season = row.insertCell(19);
+	season.innerHTML = rowValues.season;
+
+}
+
+window.EntryPoint = EntryPoint
 
 
 

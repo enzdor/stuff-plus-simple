@@ -31,6 +31,27 @@ h1 {
 	grid-template-columns: 100%;
 }
 
+.h-search {
+	cursor: pointer;
+}
+
+#h-plus-search {
+	color: blue;
+}
+
+#regressor-search, #number-search{
+	display: none;
+}
+
+#pitchTypeRegressor {
+	width: 100px;
+}
+
+#search-options {
+	display: grid;
+	grid-template-columns: 100%
+}
+
 img {
 	width: 100%;
 }
@@ -73,12 +94,19 @@ tr:nth-child(odd) td {
 	.section {
 		margin: 0 15%;
 	}
+
 	.image-gallery {
 		grid-template-columns: 50% 50%;
 	}
+
+	#search_options {
+		grid-template-columns: 33% 33% 33%;
+	}
+
 	h1 {
 		margin: 0.5rem 15%;
 	}
+	
 	footer {
 		margin: 1rem 15%;
 	}
