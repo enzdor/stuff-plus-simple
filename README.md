@@ -1,9 +1,6 @@
 # Stuff Plus Simple
 
-![](src/example.mkv)
-<p align="center">
-<img src="./src/example.mkv">
-</p>
+![Example](src/example.mp4)
 
 Stuff Plus Simple is the website where I host the data obtained from [ss-py](https://github.com/enzdor/ss-py), a simple stuff, location, and pitching plus model script. The data you can browse through is the sqlite database that is the output of ss-py. The database contains the tables stuff plus, location plus, pitching plus, stuff_regressors and pitchers.
 
