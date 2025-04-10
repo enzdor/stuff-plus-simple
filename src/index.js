@@ -45,6 +45,10 @@ class EntryPoint {
 		if (minimumN == "") {
 			minimumN = "0"
 		}
+		let limit = document.getElementById("limitPlus").value
+		if (limit == "") {
+			limit = "100000"
+		}
 
 		cleanTable('dataTablePlus')
 
@@ -58,6 +62,7 @@ class EntryPoint {
 			and pitchers.pitcher_id like '%${pitcherId}%' 
 			and N > ${minimumN}
 			order by ${sortBy} ${direction}
+			limit ${limit}
 		`);
 
 		for (let i = 0; i < result.length; i++) {
@@ -73,6 +78,10 @@ class EntryPoint {
 		const sortBy = document.getElementById("sortByNumber").value
 		const direction = document.getElementById("directionNumber").value
 		const season = document.getElementById("seasonNumber").value
+		let limit = document.getElementById("limitNumber").value
+		if (limit == "") {
+			limit = "100000"
+		}
 
 		cleanTable('dataTableNumber')
 
@@ -85,6 +94,7 @@ class EntryPoint {
 			and season like '%${season}%'
 			and pitchers.pitcher_id like '%${pitcherId}%' 
 			order by ${sortBy} ${direction}
+			limit ${limit}
 		`);
 
 		for (let i = 0; i < result.length; i++) {
@@ -101,6 +111,15 @@ class EntryPoint {
 		const direction = document.getElementById("directionRegressor").value
 		const season = document.getElementById("seasonRegressor").value
 		const pitchType = document.getElementById("pitchTypeRegressor").value
+		let minimumPtn = document.getElementById("minimumPtnRegressor").value
+		if (minimumPtn == "") {
+			minimumPtn = "0"
+		}
+		console.log(minimumPtn)
+		let limit = document.getElementById("limitRegressor").value
+		if (limit == "") {
+			limit = "100000"
+		}
 
 		cleanTable('dataTableRegressor')
 
@@ -109,17 +128,58 @@ class EntryPoint {
 			select * from stuff_regressors
 			inner join pitchers
 			on stuff_regressors.pitcher_id = pitchers.pitcher_id
+			left join stuff_plus on stuff_regressors.pitcher_id = stuff_plus.pitcher_id
+			and stuff_regressors.season = stuff_plus.season
 			where pitcher_name like '%${pitcherName}%' 
-			and season like '%${season}%'
+			and stuff_regressors.season like '%${season}%'
 			and pitch_type like '%${pitchType}%'
 			and pitchers.pitcher_id like '%${pitcherId}%' 
+			and
+			(case
+				when stuff_regressors.pitch_type like 'FF' then FF_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'SI' then SI_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'FC' then FC_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'CH' then CH_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'FS' then FS_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'FO' then FO_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'SC' then SC_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'CU' then CU_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'KC' then KC_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'CS' then CS_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'SL' then SL_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'ST' then ST_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'SV' then SV_n > ${minimumPtn}
+				when stuff_regressors.pitch_type like 'KN' then KN_n > ${minimumPtn}
+			end)
 			order by ${sortBy} ${direction}
+			limit ${limit}
 		`);
+		console.log(result)
+		/*
+		*/
 
 		for (let i = 0; i < result.length; i++) {
 			newRowRegressor(result[i])
 		}
 		return
+	}
+
+	static async loadPlayground() {
+		try {
+			const input = document.getElementById("playground-input").value
+
+			const result = await worker.db.query(input)
+			const columns = Object.keys(result[0]);
+
+			const rawText = [
+				columns.join("|"),
+				"-".repeat(columns.join("|").length),
+				...result.map(row => columns.map(col => row[col] !== null ? row[col] : '').join("|")) // Join each row's values with a pipe (|) separator
+			].join("\n");
+			document.getElementById("playground-output").innerHTML = rawText
+		} catch (e) {
+			document.getElementById("playground-output").innerHTML = e
+		}
 	}
 
 	static hideRest(toNotHide) {
@@ -128,7 +188,7 @@ class EntryPoint {
 		not.style.display = "block";
 		titleNot.style.color = "blue";
 
-		const opts = ['plus-search', 'number-search', 'regressor-search']
+		const opts = ['plus-search', 'number-search', 'regressor-search', 'playground-search']
 		const index = opts.indexOf(toNotHide)
 		opts.splice(index, 1)
 

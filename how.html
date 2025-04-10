@@ -39,15 +39,15 @@
 					<br />
 					<h2 id="script">Script</h2>
 					<br />
-					<p>The tool that was used to build these models was FLAML&#39;s automl (auto machine learning) which allows me to perform accurate regressions without having to worry about tuning the models. The library that was used for these models was XGBoost because it is widely used. Each of the three models (stuff, location, and pitching) is subdivided into three different groups according to pitch types: fastball, offspeed, and breaking. These three different general pitch type groups allow similar pitches to be compared to each other instead of being compared to pitches that are very different. For example, a four-seam fastball (a very fast pitch with little vertical and horizontal movement) will be compared to a two-seamer (a very fast pitch with some vertical and horizontal movement) but will not be compared to a curveball (slow pitch with lots of vertical movement) or a slider (slow pitch with lots of horizontal and vertical movement).</p>
+					<p>The tool that was used to build these models was FLAML&#39;s automl (auto machine learning) which allows me to perform accurate regressions without having to worry about tuning the models. The estimator that was used for these models was XGBoost because it is widely used. Each of the three models (stuff, location, and pitching) is subdivided into three different groups according to pitch types: fastball, offspeed, and breaking. These three different general pitch type groups allow similar pitches to be compared to each other. For example, a four-seam fastball (a very fast pitch with little vertical and horizontal movement) will be compared to a two-seamer (a very fast pitch with some vertical and horizontal movement) but will not be compared to a curveball (slow pitch with lots of vertical movement) or a slider (slow pitch with lots of horizontal and vertical movement).</p>
 					<br />
-					<p>The script can be subdivided into three general parts:</p>
-					<ol class="list">
-						<li>Loading data: here the script takes the csv file and will create lists where the results will be saved to.</li>
-						<li>Performing calculations: here is the part where automl is called and the regression is performed for each model. After this, a pitcher&#39;s pitch type value is calculated and the pitcher&#39;s arsenal value is also calculated.</li>
-						<li>Storing the data: all of the results are finally saved to a sqlite file with a summary file accompanying it.</li>
-					</ol>
-					<br />
+					<p>The whole program is divided into two different python files one is called ml_stuff.py and the other is called predict.py. In ml_stuff.py the models are created using the baseball savant data and FLAML's automl and then saved to a folder called models in the directory where the script was run. The predict.py loads the models and the baseball savant data and makes the predictions using the models. Then, it calculates stuff, location and pitching plus. The data is then saved to a sqlite3 database. Example:</p>
+					<p><pre><code>
+python3 ml_stuff.py baseballsavant242322.csv
+python3 predict.py baseballsavant242322.csv
+					</code></pre></p>
+					<p>The models were created using data from the 2022, 2023 and 2024 seasons. This was done to have a very large sample, and it also helps to have just one model to make predictions with for all the past seasons up until 2015, which is when baseball savant data starts. All of the nine models were trained for nine hours each, which is probably overkill.</p>
+					<br/>
 					<p>You can find the source code for the script <a href="!https://github.com/enzdor/ss-py/">here</a>, you will find that there are some comments trying to explain what happens in each block of code.</p>
 				</div>
 				<div class="container">
@@ -55,42 +55,7 @@
 					<br />
 					<p>All of the stuff, location, and pitching plus values for each pitcher can be seen in the home page of this website.</p>
 					<br />
-					<p>First of all we are going to look at the R^2 of the different models, which shows how well does the model explain the &#39;y&#39;, which in our case would be how well does the model explain either, stuff, location or pitching plus.</p>
-					<br />
-					<table>
-						<thead>
-						<tr>
-							<th></th>
-							<th>Stuff</th>
-							<th>Location</th>
-							<th>Pitching</th>
-						</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Fastballs</td>
-								<td>0.078</td>
-								<td>0.039</td>
-								<td>0.053</td>
-							</tr>
-							<tr>
-								<td>Breaking Balls</td>
-								<td>0.028</td>
-								<td>0.056</td>
-								<td>0.069</td>
-							</tr>
-							<tr>
-								<td>Offspeed</td>
-								<td>0.020</td>
-								<td>0.025</td>
-								<td>0.131</td>
-							</tr>
-						</tbody>
-					</table>
-					<br />
-					<p>As we can see from the table above which contains the R^2 for each of the models, the models are not very good at explaining the &#39;y&#39; which in our case is the delta run expectancy.</p>
-					<br />
-					<p>The second statistic we are going to look at is the stickiness of the stuff, location, and pitching plus. This is done by running a simple regression of the 2023 on the 2024, meaning we are trying to explain the results of the 2024 with the results of the 2023 to see how predictive the models are season to season.</p>
+					<p>The first statistic we are going to look at is the stickiness of the stuff, location, and pitching plus. This is done by running a simple regression of the 2023 on the 2024, meaning we are trying to explain the results of the 2024 with the results of the 2023 to see how predictive the models are season to season.</p>
 					<br />
 					<table>
 						<thead>
@@ -104,14 +69,14 @@
 						<tbody>
 							<tr>
 								<td>2023 on 2024 R^2</td>
-								<td>-0.75</td>
-								<td>-0.50</td>
-								<td>-0.48</td>
+								<td>0.731</td>
+								<td>-0.073</td>
+								<td>0.769</td>
 							</tr>
 						</tbody>
 					</table>
 					<br />
-					<p>In the table above, we can see that all of the R^2 are negative. This means that the values of the 2023 are worse at predicting the values of the 2024 season than the mean of the 2024 season, this is very bad. Below we can see some plots that show the relationships of the two seasons.</p>
+					<p>We can see in the table above that the R^2 for stuff plus and pitching plus are really high, while the one for location is negative. The former R^2s show that stuff and pitching plus are really sticky year to year, this is very good because it shows that there is some predictive value to the metric, but it doesn't mean that the predictions are good. The latter though is negative, this shows that you are better off using the mean of the 2024 data to make predictions of itself than 2023 data. This shows that this metric has little predictive value, we can also see differences in the graphs below that plot the relationship of the data between the two seasons.</p>
 					<div class="image-gallery">
 						<div class="image-container">
 							<img src="./src/stuff_2324.png" alt="Plot showing stuff plus for 2024 in the y axis and for 2023 in x axis, points for the corresponding observations in the plot." \>
@@ -145,13 +110,189 @@
 						</div>
 					<br />
 					<p>You can find out what all of the independent variables are in this <a href="https://baseballsavant.mlb.com/csv-docs">link</a>. Below I will provide plots that show the relationship of the main five independent variables against the stuff, location, or pitching plus for each of the three different pitch type groups.</p>
+
+					<br />
+					<p>Here you can find the leaders for each of the three pitch type groups that have more than 100 pitches thrown for the corresponding pitch type. 100 is league average, if stuff plus is greater than 100, it means that the pitch is better than league average. For example, 110 is 10% better than league average. The same for values less than 100.</p>
+					<br />
+
+					<p>Fastball Averages and Leaders:</p>
+					<br />
+					<table>
+						<thead>
+							<tr>
+								<th>Stuff Plus</th>
+								<th>release_pos_x</th>
+								<th>release_pos_z</th>
+								<th>vx0</th>
+								<th>vy0</th>
+								<th>vz0</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>100.87</td><td>-0.85</td><td>5.74</td><td>2.99</td><td>-136.58</td><td>-4.58</td></tr>
+						</tbody
+					</table>
+
+
+					<table>
+						<thead>
+							<tr>
+								<th>Player Name</th>
+								<th>Pitch Type</th>
+								<th>Stuff Plus</th>
+								<th>release_pos_x</th>
+								<th>release_pos_z</th>
+								<th>vx0</th>
+								<th>vy0</th>
+								<th>vz0</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>Milner, Hoby</td><td>FF</td><td>259</td><td>4.12</td><td>4.37</td><td>-13.03</td><td>-128.65</td><td>1.95</td></tr>
+							<tr><td>Milner, Hoby</td><td>SI</td><td>253</td><td>4.17</td><td>4.32</td><td>-12.86</td><td>-128.19</td><td>1.12</td></tr>
+							<tr><td>Hill, Tim</td><td>SI</td><td>249</td><td>3.89</td><td>3.03</td><td>-11.62</td><td>-128.42</td><td>5.18</td></tr>
+							<tr><td>Hill, Tim</td><td>FF</td><td>246</td><td>3.71</td><td>3.4</td><td>-12.1</td><td>-131.39</td><td>4.39</td></tr>
+							<tr><td>Diekman, Jake</td><td>FF</td><td>244</td><td>4.03</td><td>5.63</td><td>-13.34</td><td>-136.97</td><td>-4.34</td></tr>
+							<tr><td>Lodolo, Nick</td><td>FF</td><td>242</td><td>3.55</td><td>5.55</td><td>-12.76</td><td>-136.46</td><td>-3.37</td></tr>
+							<tr><td>Lodolo, Nick</td><td>SI</td><td>229</td><td>3.6</td><td>5.44</td><td>-12.06</td><td>-136.51</td><td>-2.73</td></tr>
+							<tr><td>Rodríguez, Joely</td><td>SI</td><td>218</td><td>3.22</td><td>5.56</td><td>-11.22</td><td>-130.53</td><td>-2.62</td></tr>
+							<tr><td>Young, Danny</td><td>SI</td><td>208</td><td>3.26</td><td>5.32</td><td>-11.07</td><td>-132.6</td><td>-2.73</td></tr>
+							<tr><td>Garcia, Robert</td><td>FF</td><td>208</td><td>3.71</td><td>5.61</td><td>-11.17</td><td>-137.09</td><td>-4.63</td></tr>
+							<tr><td>Sale, Chris</td><td>SI</td><td>203</td><td>3.13</td><td>5.03</td><td>-10.89</td><td>-136.74</td><td>-1.51</td></tr>
+							<tr><td>Ferrer, Jose A.</td><td>SI</td><td>203</td><td>2.83</td><td>5.94</td><td>-11.28</td><td>-142.11</td><td>-5.52</td></tr>
+							<tr><td>Mantiply, Joe</td><td>SI</td><td>200</td><td>3.33</td><td>5.13</td><td>-10.58</td><td>-129.08</td><td>-1.02</td></tr>
+							<tr><td>Rogers, Tyler</td><td>SI</td><td>199</td><td>-3.79</td><td>1.09</td><td>8.57</td><td>-119.02</td><td>10.99</td></tr>
+							<tr><td>Yarbrough, Ryan</td><td>FF</td><td>194</td><td>3.13</td><td>5.21</td><td>-10.26</td><td>-125.56</td><td>-0.76</td></tr>
+							<tr><td>Sale, Chris</td><td>FF</td><td>194</td><td>3.05</td><td>5.21</td><td>-10.53</td><td>-137.7</td><td>-2.05</td></tr>
+							<tr><td>Puk, A.J.</td><td>FF</td><td>192</td><td>3.13</td><td>5.54</td><td>-10.83</td><td>-138.68</td><td>-4.18</td></tr>
+							<tr><td>Heaney, Andrew</td><td>FF</td><td>189</td><td>2.97</td><td>4.99</td><td>-10.39</td><td>-132.86</td><td>-1.99</td></tr>
+							<tr><td>Puk, A.J.</td><td>SI</td><td>184</td><td>2.99</td><td>5.54</td><td>-10.55</td><td>-137.39</td><td>-4.01</td></tr>
+							<tr><td>Hurter, Brant</td><td>SI</td><td>181</td><td>3.13</td><td>5.87</td><td>-10.25</td><td>-134.21</td><td>-3.34</td></tr>
+						</tbody>
+					</table>
+
+					<br />
+					<p>Offspeed Averages and Leaders:</p>
+					<table>
+						<thead>
+							<tr>
+								<th>Stuff Plus</th>
+								<th>release_pos_x</th>
+								<th>release_pos_z</th>
+								<th>vx0</th>
+								<th>vy0</th>
+								<th>vz0</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>101.37</td><td>-0.81</td><td>5.75</td><td>2.56</td><td>-126.62</td><td>-3.77</td></tr>
+						</tbody
+					</table>
+
+					<br />
+					<table>
+						<thead>
+							<tr>
+								<th>Player Name</th>
+								<th>Pitch Type</th>
+								<th>Stuff Plus</th>
+								<th>release_pos_x</th>
+								<th>release_pos_z</th>
+								<th>vx0</th>
+								<th>vy0</th>
+								<th>vz0</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>Garcia, Robert</td><td>CH</td><td>247</td><td>3.86</td><td>5.52</td><td>-10.96</td><td>-127.32</td><td>-3.3</td></tr>
+							<tr><td>Lodolo, Nick</td><td>CH</td><td>246</td><td>3.53</td><td>5.49</td><td>-10.49</td><td>-127.88</td><td>-3.04</td></tr>
+							<tr><td>Milner, Hoby</td><td>CH</td><td>235</td><td>4.34</td><td>4.07</td><td>-10.81</td><td>-117.68</td><td>1.03</td></tr>
+							<tr><td>Sale, Chris</td><td>CH</td><td>224</td><td>3.16</td><td>4.84</td><td>-8.96</td><td>-126.49</td><td>-1.16</td></tr>
+							<tr><td>Hudson, Bryan</td><td>FC</td><td>216</td><td>3.37</td><td>4.93</td><td>-8.46</td><td>-125.08</td><td>-1.07</td></tr>
+							<tr><td>Fleming, Josh</td><td>FC</td><td>209</td><td>2.78</td><td>5.51</td><td>-8.3</td><td>-126.8</td><td>-2.36</td></tr>
+							<tr><td>Yarbrough, Ryan</td><td>FC</td><td>200</td><td>3.35</td><td>4.96</td><td>-8.81</td><td>-121.7</td><td>1.13</td></tr>
+							<tr><td>Weathers, Ryan</td><td>CH</td><td>198</td><td>2.96</td><td>5.59</td><td>-8.4</td><td>-125.52</td><td>-3.1</td></tr>
+							<tr><td>Manaea, Sean</td><td>FC</td><td>195</td><td>2.55</td><td>5.56</td><td>-7.38</td><td>-128.57</td><td>-2.08</td></tr>
+							<tr><td>Mantiply, Joe</td><td>CH</td><td>194</td><td>3.32</td><td>5.07</td><td>-8.49</td><td>-117.67</td><td>-0.12</td></tr>
+							<tr><td>Koenig, Jared</td><td>FC</td><td>185</td><td>3.01</td><td>5.7</td><td>-8.02</td><td>-131.37</td><td>-3.73</td></tr>
+							<tr><td>Manaea, Sean</td><td>CH</td><td>185</td><td>2.93</td><td>5.56</td><td>-8.26</td><td>-123.96</td><td>-2.57</td></tr>
+							<tr><td>Heaney, Andrew</td><td>CH</td><td>184</td><td>2.97</td><td>5.05</td><td>-8.23</td><td>-121.58</td><td>-1.52</td></tr>
+							<tr><td>Rogers, Trevor</td><td>CH</td><td>179</td><td>2.5</td><td>5.63</td><td>-7.94</td><td>-124.37</td><td>-3.32</td></tr>
+							<tr><td>Hall, DL</td><td>CH</td><td>178</td><td>2.94</td><td>5.46</td><td>-8.68</td><td>-123.05</td><td>-3.96</td></tr>
+							<tr><td>Blach, Ty</td><td>CH</td><td>178</td><td>3.08</td><td>5.75</td><td>-7.91</td><td>-116.34</td><td>-2.14</td></tr>
+							<tr><td>Yarbrough, Ryan</td><td>CH</td><td>175</td><td>3.2</td><td>4.96</td><td>-7.6</td><td>-112.43</td><td>0.32</td></tr>
+							<tr><td>Blach, Ty</td><td>FC</td><td>175</td><td>3.16</td><td>5.67</td><td>-8.06</td><td>-120.62</td><td>-2.04</td></tr>
+							<tr><td>Strahm, Matt</td><td>FC</td><td>172</td><td>1.98</td><td>5.33</td><td>-6.08</td><td>-128.69</td><td>-1.94</td></tr>
+							<tr><td>Booser, Cam</td><td>FC</td><td>172</td><td>2.82</td><td>5.68</td><td>-7.21</td><td>-128.39</td><td>-3.04</td></tr>
+						</tbody>
+					</table>
+
+					<br />
+					<p>Breaking-ball Averages and Leaders:</p>
+					<table>
+						<thead>
+							<tr>
+								<th>Stuff Plus</th>
+								<th>release_pos_x</th>
+								<th>release_pos_z</th>
+								<th>vx0</th>
+								<th>vy0</th>
+								<th>vz0</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>100.02</td><td>-0.93</td><td>5.75</td><td>1.96</td><td>-121.04</td><td>-2.14</td></tr>
+						</tbody
+					</table>
+
+
+					<br />
+					<table>
+						<thead>
+							<tr>
+								<th>Player Name</th>
+								<th>Pitch Type</th>
+								<th>Stuff Plus</th>
+								<th>release_pos_x</th>
+								<th>release_pos_z</th>
+								<th>vx0</th>
+								<th>vy0</th>
+								<th>vz0</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td>Rogers, Tyler</td><td>SL</td><td>179</td><td>-3.83</td><td>1.11</td><td>7.25</td><td>-106.55</td><td>8.09</td></tr>
+							<tr><td>Milner, Hoby</td><td>ST</td><td>168</td><td>4.13</td><td>4.33</td><td>-7</td><td>-115.59</td><td>1.19</td></tr>
+							<tr><td>Hudson, Bryan</td><td>ST</td><td>166</td><td>3.47</td><td>4.79</td><td>-6.37</td><td>-118.5</td><td>0.45</td></tr>
+							<tr><td>Puk, A.J.</td><td>SL</td><td>158</td><td>3.36</td><td>5.49</td><td>-8.39</td><td>-124.22</td><td>-2.43</td></tr>
+							<tr><td>Yarbrough, Ryan</td><td>CU</td><td>155</td><td>3.39</td><td>4.81</td><td>-5.61</td><td>-103.59</td><td>1.49</td></tr>
+							<tr><td>Manaea, Sean</td><td>SL</td><td>154</td><td>2.57</td><td>5.56</td><td>-6.12</td><td>-123.93</td><td>-1.24</td></tr>
+							<tr><td>Diekman, Jake</td><td>ST</td><td>152</td><td>4.26</td><td>5.48</td><td>-7.71</td><td>-120.26</td><td>-1.55</td></tr>
+							<tr><td>Heaney, Andrew</td><td>SL</td><td>151</td><td>3.01</td><td>5.04</td><td>-7.55</td><td>-119.96</td><td>-1.39</td></tr>
+							<tr><td>Banda, Anthony</td><td>SL</td><td>149</td><td>2.84</td><td>5.36</td><td>-6.87</td><td>-124.68</td><td>-2.25</td></tr>
+							<tr><td>Sale, Chris</td><td>SL</td><td>149</td><td>3.09</td><td>5.11</td><td>-5.33</td><td>-114.39</td><td>0.52</td></tr>
+							<tr><td>Little, Luke</td><td>ST</td><td>148</td><td>3.25</td><td>5.35</td><td>-6.97</td><td>-118.84</td><td>-1.22</td></tr>
+							<tr><td>Bernardino, Brennan</td><td>CU</td><td>148</td><td>3.27</td><td>4.85</td><td>-5.18</td><td>-114.79</td><td>0.63</td></tr>
+							<tr><td>Harris, Hogan</td><td>CU</td><td>148</td><td>2.44</td><td>5.93</td><td>-3.05</td><td>-105.26</td><td>2.19</td></tr>
+							<tr><td>Harrison, Kyle</td><td>SV</td><td>147</td><td>1.99</td><td>4.74</td><td>-2.39</td><td>-117.28</td><td>1.76</td></tr>
+							<tr><td>Mantiply, Joe</td><td>CU</td><td>146</td><td>3.36</td><td>5.16</td><td>-6.29</td><td>-115.24</td><td>-0.32</td></tr>
+							<tr><td>Ellard, Fraser</td><td>SL</td><td>146</td><td>3.03</td><td>5.69</td><td>-7.85</td><td>-124.75</td><td>-2.98</td></tr>
+							<tr><td>Wood, Alex</td><td>SL</td><td>146</td><td>2.04</td><td>4.61</td><td>-3.81</td><td>-118.43</td><td>0.52</td></tr>
+							<tr><td>Young, Danny</td><td>ST</td><td>145</td><td>3.66</td><td>4.98</td><td>-6.24</td><td>-117.17</td><td>-0.66</td></tr>
+							<tr><td>González, Victor</td><td>SL</td><td>144</td><td>2.28</td><td>4.95</td><td>-6.6</td><td>-125.04</td><td>-1.82</td></tr>
+							<tr><td>Cimber, Adam</td><td>SL</td><td>144</td><td>-4.22</td><td>2.34</td><td>5.34</td><td>-106.63</td><td>4.84</td></tr>
+						</tbody>
+					</table>
+					<br />
+					<p>You can probably tell that most of these pitchers are side arm throwers, the model seems to prefer pitchers with a low release_point_z. This may be due to the fact that there is no differentiation between lefties and righties in the model thus giving more importance to vertical release point. Why it likes low release points, I'm not sure.</p>
+					<br />
 				</div>
 				<div class="container">
 					<h2 id="conclusion">Conclusion</h2>
 					<br />
-					<p>There is not much that we can deduce from these results as these are very imperfect models. There are things that can be done to improve them. The first thing that should be tested is, instead of creating different models for each pitch type group, all of the pitches should be grouped together, this may give more accurate results. Also, include pitcher handedness and adjust the release_pos_x variable accordingly. Moreover, the time budget could be increased from 1 hour. Finally, I think I could create better graphs to show the data.</p>
+					<p>The stuff model is at least serviceable but it has an obvious preference for low release angles. There is also the fact that lefties and righties aren't differentiated, this may be adding to the problem. For the location models, which are probably unusable, one simple way of improving them in the future would be to add more information about the situation of the game when the pitch is thrown like the score and if there are any runners on base. Even if other location models do, I think its worth the try. All of the variable from the location and stuff model can be added to the pitching model too. The problem with the pitching model right now is that it is not so different from the stuff model as the current variables have little explicative power no. </p>
 					<br />
-					<p>I can say that this was a very good project, even if the results are very inaccurate. It allowed me to:</p>
+					<p>I can say that this was a very good project, even if the results aren't very accurate. It allowed me to:</p>
 					<ul class="list">
 						<li>to learn to use automl tools</li>
 						<li>get a deeper understanding of python (even if it isn&#39;t my favourite language)</li>
@@ -165,49 +306,49 @@
 					<br />
 					<div class="image-gallery">
 						<div class="image-container">
-							<img src="./src/rel_pos_x-sp-breaking.png" alt="Stuff plus on the y axis rel_pos_x on the x axis, and points representing the observations in the plot." />
+							<img src="./src/release_pos_x-stuff_plus-2024-breaking_balls.png" alt="Stuff plus on the y axis release_pos_x on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/rel_pos_x-sp-fastballs.png" alt="Stuff plus on the y axis rel_pos_x on the x axis, and points representing the observations in the plot." />
+							<img src="./src/release_pos_x-stuff_plus-2024-fastballs.png" alt="Stuff plus on the y axis release_pos_x on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/rel_pos_x-sp-offspeed.png" alt="Stuff plus on the y axis rel_pos_x on the x axis, and points representing the observations in the plot." />
+							<img src="./src/release_pos_x-stuff_plus-2024-offspeed.png" alt="Stuff plus on the y axis release_pos_x on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/rel_pos_z-sp-breaking.png" alt="Stuff plus on the y axis rel_pos_z on the x axis, and points representing the observations in the plot." />
+							<img src="./src/release_pos_z-stuff_plus-2024-breaking_balls.png" alt="Stuff plus on the y axis release_pos_z on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/rel_pos_z-sp-fastballs.png" alt="Stuff plus on the y axis rel_pos_z on the x axis, and points representing the observations in the plot." />
+							<img src="./src/release_pos_z-stuff_plus-2024-fastballs.png" alt="Stuff plus on the y axis release_pos_z on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/rel_pos_z-sp-offspeed.png" alt="Stuff plus on the y axis rel_pos_z on the x axis, and points representing the observations in the plot." />
+							<img src="./src/release_pos_z-stuff_plus-2024-offspeed.png" alt="Stuff plus on the y axis release_pos_z on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vx0-sp-breaking.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vx0-stuff_plus-2024-breaking_balls.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vx0-sp-fastballs.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vx0-stuff_plus-2024-fastballs.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vx0-sp-offspeed.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vx0-stuff_plus-2024-offspeed.png" alt="Stuff plus on the y axis vx0 on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vy0-sp-breaking.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vy0-stuff_plus-2024-breaking_balls.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vy0-sp-fastballs.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vy0-stuff_plus-2024-fastballs.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vy0-sp-offspeed.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vy0-stuff_plus-2024-offspeed.png" alt="Stuff plus on the y axis vy0 on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vz0-sp-breaking.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vz0-stuff_plus-2024-breaking_balls.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vz0-sp-fastballs.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vz0-stuff_plus-2024-fastballs.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
 						</div>
 						<div class="image-container">
-							<img src="./src/vz0-sp-offspeed.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
+							<img src="./src/vz0-stuff_plus-2024-offspeed.png" alt="Stuff plus on the y axis vz0 on the x axis, and points representing the observations in the plot." />
 						</div>
 					</div>
 				</div>

@@ -1,5 +1,4 @@
 html {
-	font-family: sans-serif;
 	font-size: 1.15rem;
 }
 
@@ -12,6 +11,14 @@ html {
 
 h1 {
 	margin: 0.5rem;
+}
+
+code, #playground-output, #playground-input{
+	font-family: courier, monospace;
+}
+
+#playground-input {
+	padding: 5px;
 }
 
 .section {
@@ -39,7 +46,7 @@ h1 {
 	color: blue;
 }
 
-#regressor-search, #number-search{
+#regressor-search, #number-search, #playground-search{
 	display: none;
 }
 

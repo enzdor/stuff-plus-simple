@@ -25,8 +25,8 @@
 					<br />
 					<p>If you want a more in-depth explation on how this was built, click <a href="how.html">here!<a/></p>
 					<br />
-					<br />
-					<h2>Choose (click on) one of the three tables to browse through...
+					<h2>Choose (click on) one of the three tables to browse through...</h2>
+					<p>You can change the given options and then click load to get the data! Limiting the number of rows is recommended.</p>
 				</div>
 				<div id="search-options">
 					<div class="container h-search" id="h-plus-search" onclick="EntryPoint.hideRest('plus-search')">
@@ -37,6 +37,9 @@
 					</div>
 					<div class="container h-search" id="h-regressor-search" onclick="EntryPoint.hideRest('regressor-search')">
 						<h3>3. Stuff Independent Variables</h3>
+					</div>
+					<div class="container h-search" id="h-playground-search" onclick="EntryPoint.hideRest('playground-search')">
+						<h3>4. Playground</h3>
 					</div>
 				</div>
 				<div class="container" id="plus-search">
@@ -100,6 +103,11 @@
 					<label for="minimumNPlus">Minimum Number of Pitches Thrown:</label>
 					<br/>
 					<input type="number" name="minimumNPlus" id="minimumNPlus" placeholder="0" required/>
+					<br/>
+					<br/>
+					<label for="limitPlus">Limit number of rows:</label>
+					<br/>
+					<input type="number" name="limitPlus" id="limitPlus" placeholder="100" />
 					<br/>
 					<br/>
 					<button onclick="EntryPoint.loadPlus()">Load</button>
@@ -178,6 +186,11 @@
 					  <option value="DESC">Ascending</option>
 					  <option value="ASC">Descending</option>
 					</select>
+					<br/>
+					<br/>
+					<label for="limitNumber">Limit number of rows:</label>
+					<br/>
+					<input type="number" name="limitNumber" id="limitNumber" placeholder="100" />
 					<br/>
 					<br/>
 					<button onclick="EntryPoint.loadNumber()">Load</button>
@@ -281,18 +294,40 @@
 					</select>
 					<br/>
 					<br/>
+					<label for="minimumPtnRegressor">Limit number of pitches thrown:</label>
+					<br/>
+					<input type="number" name="minimumPtnRegressor" id="minimumPtnRegressor" placeholder="33" />
+					<br/>
+					<br/>
+					<label for="limitRegressor">Limit number of rows:</label>
+					<br/>
+					<input type="number" name="limitRegressor" id="limitRegressor" placeholder="100" />
+					<br/>
+					<br/>
 					<button onclick="EntryPoint.loadRegressor()">Load</button>
 					<br/>
 					<br/>
+					<ul>
+						<li>release_speed = rs</li>
+						<li>release_pos_x = rpx</li>
+						<li>release_pos_y = rpy</li>
+						<li>release_pos_z = rpz</li>
+						<li>release_spin_rate = rsr</li>
+						<li>spin_axis = sa</li>
+						<li>release_extension = re</li>
+						<li>stuff_plus = S+</li>
+						<li>season = s</li>
+						<br/>
+					</ul>
 					<table id="dataTableRegressor">
 						<tr>
 							<th>Pitcher ID</th>
 							<th>Name</th>
 							<th>Type</th>
-							<th>release_speed</th>
-							<th>release_pos_x</th>
-							<th>release_pos_y</th>
-							<th>release_pos_z</th>
+							<th>rs</th>
+							<th>rpx</th>
+							<th>rpy</th>
+							<th>rpz</th>
 							<th>pfx_x</th>
 							<th>pfx_z</th>
 							<th>vx0</th>
@@ -301,13 +336,121 @@
 							<th>ax</th>
 							<th>ay</th>
 							<th>az</th>
-							<th>release_spin_rate</th>
-							<th>spin_axis</th>
-							<th>release_extension</th>
-							<th>stuff_plus</th>
-							<th>season</th>
+							<th>rsr</th>
+							<th>sa</th>
+							<th>re</th>
+							<th>S+</th>
+							<th>s</th>
 						</tr>
 					</table>
+				</div>
+				<div class="container" id="playground-search">
+					<div>
+
+						<label for="playground-input">Input:</label>
+						<br/>
+						<textarea name="playground-input" id="playground-input">Some sql...</textarea>
+						<br/>
+						<button onclick="EntryPoint.loadPlayground()">Load</button>
+						<br/>
+					</div>
+					<div>
+						<br/>
+						<p>Output:</p>
+						<br/>
+						<div>
+						<pre id="playground-output">some data...</pre>
+						</div>
+					</div>
+					<div>
+						<p>Here you can query directly to the sqlite db. The textarea above can be resized and after you are done writing the script you just need to press load to query the db. The tables are location_plus, pitching_plus, stuff_plus, stuff_regressors, pitchers. You can find their schemas below:</p>
+						<br />
+						<p>The first table is the same table for location and pitching plus it just has a corresponding id and name FF_avg_x_rv100 is just the stuff, location or pitching plus for the corresponding pitch.</p>
+
+<pre>
+<code>
+CREATE TABLE stuff_plus(
+    stuff_id INTEGER PRIMARY KEY,
+    season INTEGER NOT NULL,
+    FF_avg_x_rv100 INTEGER,
+    SI_avg_x_rv100 INTEGER,
+    FC_avg_x_rv100 INTEGER,
+    CH_avg_x_rv100 INTEGER,
+    FS_avg_x_rv100 INTEGER,
+    FO_avg_x_rv100 INTEGER,
+    SC_avg_x_rv100 INTEGER,
+    CU_avg_x_rv100 INTEGER,
+    KC_avg_x_rv100 INTEGER,
+    CS_avg_x_rv100 INTEGER,
+    SL_avg_x_rv100 INTEGER,
+    ST_avg_x_rv100 INTEGER,
+    SV_avg_x_rv100 INTEGER,
+    KN_avg_x_rv100 INTEGER,
+    FF_n INTEGER,
+    SI_n INTEGER,
+    FC_n INTEGER,
+    CH_n INTEGER,
+    FS_n INTEGER,
+    FO_n INTEGER,
+    SC_n INTEGER,
+    CU_n INTEGER,
+    KC_n INTEGER,
+    CS_n INTEGER,
+    SL_n INTEGER,
+    ST_n INTEGER,
+    SV_n INTEGER,
+    KN_n INTEGER,
+    N INTEGER,
+    arsenal_avg INTEGER,
+    pitcher_id INTEGER NOT NULL,
+    FOREIGN KEY(pitcher_id) REFERENCES pitchers(pitcher_id)
+);
+</code>
+</pre>
+<br />
+
+<pre>
+<code>
+CREATE TABLE pitchers(
+    pitcher_id INTEGER PRIMARY KEY,
+    pitcher_name TEXT,
+    p_throws TEXT
+);
+</code>
+</pre>
+
+<br />
+<p>For the table below, you can find what each regressor is <a href="https://baseballsavant.mlb.com/csv-docs">here.</a></p>
+<br />
+
+<pre>
+<code>
+CREATE TABLE stuff_regressors(
+    regressor_id INTEGER PRIMARY KEY,
+    pitcher_id INTEGER NOT NULL,
+    pitch_type INTEGER NOT NULL,
+    season INTEGER NOT NULL,
+    release_speed INTEGER,
+    release_pos_x INTEGER,
+    release_pos_y INTEGER,
+    release_pos_z INTEGER,
+    pfx_x INTEGER,
+    pfx_z INTEGER,
+    vx0 INTEGER,
+    vy0 INTEGER,
+    vz0 INTEGER,
+    ax INTEGER,
+    ay INTEGER,
+    az INTEGER,
+    release_spin_rate INTEGER,
+    spin_axis INTEGER,
+    release_extension INTEGER,
+    stuff_plus INTEGER,
+    FOREIGN KEY(pitcher_id) REFERENCES pitchers(pitcher_id)
+);
+</code>
+</pre>
+					</div>
 				</div>
 			</div>
 		</main>
