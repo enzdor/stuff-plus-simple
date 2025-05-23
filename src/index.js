@@ -17,8 +17,8 @@ try {
 					serverMode: "full",
 					// production path is /stuff-plus-simple/dist/test.db
 					// dev path is        /dist/test.db
-					url: "/dist/test.db",
-					// url: "/stuff-plus-simple/dist/test.db",
+					// url: "/dist/test.db",
+					url: "/stuff-plus-simple/dist/test.db",
 					requestChunkSize: 4096,
 				},
 			},
