@@ -41,3 +41,8 @@ node_modules/.bin/http-server
 ```
 
 And you'll be able to access the website through port :8080.
+
+## TODO
+
+- Fix when limiting number of rows to show top 10 instead of bottom 10 when in descending order and vice versa.
+- Add blue to red colors in stuff regressors query page to show value against the mean

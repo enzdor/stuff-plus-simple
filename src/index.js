@@ -17,8 +17,8 @@ try {
 					serverMode: "full",
 					// production path is /stuff-plus-simple/dist/test.db
 					// dev path is        /dist/test.db
-					// url: "/dist/test.db",
-					url: "/stuff-plus-simple/dist/test.db",
+					url: "/dist/test.db",
+					// url: "/stuff-plus-simple/dist/test.db",
 					requestChunkSize: 4096,
 				},
 			},
@@ -336,9 +336,17 @@ function newRowRegressor(rowValues) {
 	spinAxis.innerHTML = rowValues.spin_axis;
 	const releaseExtension = row.insertCell(17);
 	releaseExtension.innerHTML = rowValues.release_extension;
-	const stuffPlus = row.insertCell(18);
+	const vaa = row.insertCell(18);
+	vaa.innerHTML = rowValues.vaa;
+	const haa = row.insertCell(19);
+	haa.innerHTML = rowValues.haa;
+	const abs_axis_differential = row.insertCell(20);
+	abs_axis_differential.innerHTML = rowValues.abs_axis_differential;
+	const coors = row.insertCell(21);
+	coors.innerHTML = rowValues.coors;
+	const stuffPlus = row.insertCell(22);
 	stuffPlus.innerHTML = rowValues.stuff_plus;
-	const season = row.insertCell(19);
+	const season = row.insertCell(23);
 	season.innerHTML = rowValues.season;
 
 }
