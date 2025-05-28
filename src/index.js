@@ -185,7 +185,7 @@ class EntryPoint {
 	static hideRest(toNotHide) {
 		let not = document.getElementById(toNotHide)
 		let titleNot = document.getElementById('h-' + toNotHide)
-		not.style.display = "block";
+		not.style.display = "flex";
 		titleNot.style.color = "blue";
 
 		const opts = ['plus-search', 'number-search', 'regressor-search', 'playground-search']
