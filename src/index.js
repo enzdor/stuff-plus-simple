@@ -215,7 +215,7 @@ function cleanTable(tableName) {
 
 function newRowPlus(rowValues) {
 	const table = document.getElementById('dataTablePlus')
-	const row = table.insertRow(1)
+	const row = table.insertRow(-1)
 
 	const id = row.insertCell(0)
 	id.innerHTML = rowValues.pitcher_id
@@ -258,7 +258,7 @@ function newRowPlus(rowValues) {
 
 function newRowNumber(rowValues) {
 	const table = document.getElementById('dataTableNumber')
-	const row = table.insertRow(1)
+	const row = table.insertRow(-1)
 
 	const id = row.insertCell(0)
 	id.innerHTML = rowValues.pitcher_id
@@ -301,7 +301,7 @@ function newRowNumber(rowValues) {
 
 function newRowRegressor(rowValues) {
 	const table = document.getElementById('dataTableRegressor')
-	const row = table.insertRow(1)
+	const row = table.insertRow(-1)
 
 	const pitcherId = row.insertCell(0);
 	pitcherId.innerHTML = rowValues.pitcher_id;
