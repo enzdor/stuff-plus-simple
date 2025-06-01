@@ -115,7 +115,6 @@ class EntryPoint {
 		if (minimumPtn == "") {
 			minimumPtn = "0"
 		}
-		console.log(minimumPtn)
 		let limit = document.getElementById("limitRegressor").value
 		if (limit == "") {
 			limit = "100000"
@@ -154,7 +153,6 @@ class EntryPoint {
 			order by ${sortBy} ${direction}
 			limit ${limit}
 		`);
-		console.log(result)
 		/*
 		*/
 
@@ -183,20 +181,25 @@ class EntryPoint {
 	}
 
 	static hideRest(toNotHide) {
-		let not = document.getElementById(toNotHide)
+		let elementsNot = document.getElementsByClassName(toNotHide)
 		let titleNot = document.getElementById('h-' + toNotHide)
-		not.style.display = "flex";
 		titleNot.style.color = "blue";
+
+		for (let i = 0; i < elementsNot.length; i++) {
+			elementsNot[i].style.display = "flex";
+		}
 
 		const opts = ['plus-search', 'number-search', 'regressor-search', 'playground-search']
 		const index = opts.indexOf(toNotHide)
 		opts.splice(index, 1)
 
 		for (let i in opts) {
-			let theDiv = document.getElementById(opts[i])
-			let titletheDiv = document.getElementById('h-' + opts[i])
-			theDiv.style.display = "none";
-			titletheDiv.style.color = "black";
+			let elements = document.getElementsByClassName(opts[i])
+			let title = document.getElementById('h-' + opts[i])
+			for (let i = 0; i < elements.length; i++) {
+				elements[i].style.display = "none";
+			}
+			title.style.color = "black";
 		}
 	}
 }

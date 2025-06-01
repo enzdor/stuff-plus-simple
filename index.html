@@ -13,6 +13,11 @@
 		</header>
 		<main>
 			<div class="section">
+
+
+				<!-- Intro -->
+				
+
 				<div class="container">
 					<h2>What is Stuff Plus Simple?</h2>
 					<br/>
@@ -25,6 +30,11 @@
 					<br />
 					<p>If you want a more in-depth explation on how this was built, click <a href="how.html">here!<a/></p>
 				</div>
+
+
+				<!-- Nav for tables -->
+
+
 				<div class="container" id="search-nav">
 					<h2>Choose (click on) one of the four tables to browse through...</h2>
 					<p>You can change the given options and then click load to get the data! Limiting the number of rows is recommended.</p>
@@ -43,7 +53,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="container filter-options" id="plus-search">
+				<div class="container filter-options plus-search">
 					<h2 class="filter-title">Filters:</h2>
 					<div class="filter">
 						<label for="variablePlus">Variable:</label>
@@ -108,30 +118,37 @@
 					<div class="filter filter-button">
 						<button onclick="EntryPoint.loadPlus()">Load</button>
 					</div>
-					<table id="dataTablePlus">
-						<tr>
-							<th>Pitcher ID</th>
-							<th>Name</th>
-							<th>FF</th>
-							<th>SI</th>
-							<th>FC</th>
-							<th>CH</th>
-							<th>FS</th>
-							<th>FO</th>
-							<th>SC</th>
-							<th>CU</th>
-							<th>KC</th>
-							<th>CS</th>
-							<th>SL</th>
-							<th>ST</th>
-							<th>SV</th>
-							<th>KN</th>
-							<th>OVR</th>
-							<th>Season</th>
-						</tr>
-					</table>
 				</div>
-				<div class="container filter-options" id="number-search">
+			</div>
+			<table id="dataTablePlus" class="plus-search">
+				<tr>
+					<th>Pitcher ID</th>
+					<th>Name</th>
+					<th>FF</th>
+					<th>SI</th>
+					<th>FC</th>
+					<th>CH</th>
+					<th>FS</th>
+					<th>FO</th>
+					<th>SC</th>
+					<th>CU</th>
+					<th>KC</th>
+					<th>CS</th>
+					<th>SL</th>
+					<th>ST</th>
+					<th>SV</th>
+					<th>KN</th>
+					<th>OVR</th>
+					<th>Season</th>
+				</tr>
+			</table>
+
+
+				<!-- N pitches -->
+
+
+			<div class="section">
+				<div class="container filter-options number-search">
 					<h2 class="filter-title">Filters:</h2>
 					<div class="filter">
 						<label for="variableNumber">Variable: Number of Pitches Thrown</label>
@@ -187,7 +204,10 @@
 					<div class="filter filter-button">
 						<button onclick="EntryPoint.loadNumber()">Load</button>
 					</div>
-					<table id="dataTableNumber">
+				</div>
+			</div>
+
+					<table id="dataTableNumber" class="number-search">
 						<tr>
 							<th>Pitcher ID</th>
 							<th>Name</th>
@@ -209,8 +229,12 @@
 							<th>Season</th>
 						</tr>
 					</table>
-				</div>
-				<div class="container filter-options" id="regressor-search">
+
+				<!-- Stuff plus regressors -->
+
+
+			<div class="section">
+				<div class="container filter-options regressor-search">
 					<h2 class="filter-title">Filters:</h2>
 					<div class="filter">
 						<label for="variable">Variable: stuff plus regressor averages</label>
@@ -310,36 +334,43 @@
 							<li>season = s</li>
 						</ul>
 					</div>
-					<table id="dataTableRegressor">
-						<tr>
-							<th>Pitcher ID</th>
-							<th>Name</th>
-							<th>Type</th>
-							<th>rs</th>
-							<th>rpx</th>
-							<th>rpy</th>
-							<th>rpz</th>
-							<th>pfx_x</th>
-							<th>pfx_z</th>
-							<th>vx0</th>
-							<th>vy0</th>
-							<th>vz0</th>
-							<th>ax</th>
-							<th>ay</th>
-							<th>az</th>
-							<th>rsr</th>
-							<th>sa</th>
-							<th>re</th>
-							<th>vaa</th>
-							<th>haa</th>
-							<th>axis_diff</th>
-							<th>coors</th>
-							<th>S+</th>
-							<th>s</th>
-						</tr>
-					</table>
 				</div>
-				<div class="container filter-options" id="playground-search">
+			</div>
+			<table id="dataTableRegressor" class="regressor-search">
+				<tr>
+					<th>Pitcher ID</th>
+					<th>Name</th>
+					<th>Type</th>
+					<th>rs</th>
+					<th>rpx</th>
+					<th>rpy</th>
+					<th>rpz</th>
+					<th>pfx_x</th>
+					<th>pfx_z</th>
+					<th>vx0</th>
+					<th>vy0</th>
+					<th>vz0</th>
+					<th>ax</th>
+					<th>ay</th>
+					<th>az</th>
+					<th>rsr</th>
+					<th>sa</th>
+					<th>re</th>
+					<th>vaa</th>
+					<th>haa</th>
+					<th>axis_diff</th>
+					<th>coors</th>
+					<th>S+</th>
+					<th>s</th>
+				</tr>
+			</table>
+
+
+				<!-- Playground -->
+
+
+			<div class="section">
+				<div class="container filter-options playground-search">
 					<div>
 					<div>
 						<label for="playground-input">Input:</label>
@@ -450,6 +481,11 @@ CREATE TABLE stuff_regressors(
 				</div>
 			</div>
 		</main>
+
+
+				<!-- footer -->
+
+
 		<footer>
 				<a href="https://github.com/enzdor/stuff-plus-simple">Source Code</a>
 				<br />

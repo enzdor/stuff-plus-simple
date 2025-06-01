@@ -76,6 +76,10 @@ code, #playground-output, #playground-input{
 	margin-bottom: 0.5rem;
 }
 
+#dataTablePlus, #dataTableNumber, #dataTableRegressor {
+	margin: 1rem;
+}
+
 #search-nav {
 	background-color: #ffffba;
 	padding: 0.5rem;
@@ -90,7 +94,7 @@ code, #playground-output, #playground-input{
 	color: blue;
 }
 
-#regressor-search, #number-search, #playground-search{
+.regressor-search, .number-search, .playground-search{
 	display: none;
 }
 
@@ -107,11 +111,10 @@ footer {
 }
 
 table {
-  border-collapse: collapse;
-  border: 2px solid rgb(200,200,200);
-  letter-spacing: 1px;
+	border-collapse: collapse;
+	letter-spacing: 1px;
 	margin: 0 0vw 0 0vw;
-  font-size: 0.8rem;
+	font-size: 0.8rem;
 	margin: auto;
 }
 
