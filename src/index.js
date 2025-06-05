@@ -30,6 +30,13 @@ try {
 	console.log(e)
 }
 
+const regressors_means = await worker.db.query(`
+	select * from regressors_means
+`);
+
+const regressors_stds = await worker.db.query(`
+	select * from regressors_stds
+`);
 
 
 class EntryPoint {
@@ -302,55 +309,75 @@ function newRowNumber(rowValues) {
 function newRowRegressor(rowValues) {
 	const table = document.getElementById('dataTableRegressor')
 	const row = table.insertRow(-1)
+	let means = {}
+	let stds = {}
+	let cells = {}
+	let found1 = false
+	let found2 = false
 
-	const pitcherId = row.insertCell(0);
-	pitcherId.innerHTML = rowValues.pitcher_id;
-	const name = row.insertCell(1);
-	name.innerHTML = rowValues.pitcher_name;
-	const pitchType = row.insertCell(2);
-	pitchType.innerHTML = rowValues.pitch_type;
-	const releaseSpeed = row.insertCell(3);
-	releaseSpeed.innerHTML = rowValues.release_speed;
-	const releasePosX = row.insertCell(4);
-	releasePosX.innerHTML = rowValues.release_pos_x;
-	const releasePosY = row.insertCell(5);
-	releasePosY.innerHTML = rowValues.release_pos_y;
-	const releasePosZ = row.insertCell(6);
-	releasePosZ.innerHTML = rowValues.release_pos_z;
-	const pfxX = row.insertCell(7);
-	pfxX.innerHTML = rowValues.pfx_x;
-	const pfxZ = row.insertCell(8);
-	pfxZ.innerHTML = rowValues.pfx_z;
-	const vx0 = row.insertCell(9);
-	vx0.innerHTML = rowValues.vx0;
-	const vy0 = row.insertCell(10);
-	vy0.innerHTML = rowValues.vy0;
-	const vz0 = row.insertCell(11);
-	vz0.innerHTML = rowValues.vz0;
-	const ax = row.insertCell(12);
-	ax.innerHTML = rowValues.ax;
-	const ay = row.insertCell(13);
-	ay.innerHTML = rowValues.ay;
-	const az = row.insertCell(14);
-	az.innerHTML = rowValues.az;
-	const releaseSpinRate = row.insertCell(15);
-	releaseSpinRate.innerHTML = rowValues.release_spin_rate;
-	const spinAxis = row.insertCell(16);
-	spinAxis.innerHTML = rowValues.spin_axis;
-	const releaseExtension = row.insertCell(17);
-	releaseExtension.innerHTML = rowValues.release_extension;
-	const vaa = row.insertCell(18);
-	vaa.innerHTML = rowValues.vaa;
-	const haa = row.insertCell(19);
-	haa.innerHTML = rowValues.haa;
-	const abs_axis_differential = row.insertCell(20);
-	abs_axis_differential.innerHTML = rowValues.abs_axis_differential;
-	const coors = row.insertCell(21);
-	coors.innerHTML = rowValues.coors;
-	const stuffPlus = row.insertCell(22);
-	stuffPlus.innerHTML = rowValues.stuff_plus;
-	const season = row.insertCell(23);
+	for (let i = 0; i < regressors_means.length; i++) {
+		if (regressors_means[i].season == rowValues.season &&
+			regressors_means[i].pitch_type == rowValues.pitch_type) {
+			means = regressors_means[i]
+			found1 = true
+		} 
+	}
+
+	for (let i = 0; i < regressors_stds.length; i++) {
+		if (regressors_stds[i].season == rowValues.season &&
+			regressors_stds[i].pitch_type == rowValues.pitch_type) {
+			stds = regressors_stds[i]
+			found2 = true
+		} 
+	}
+
+	cells.pitcherId = row.insertCell(0);
+	cells.pitcherId.innerHTML = rowValues.pitcher_id;
+	cells.name = row.insertCell(1);
+	cells.name.innerHTML = rowValues.pitcher_name;
+	cells.pitchType = row.insertCell(2);
+	cells.pitchType.innerHTML = rowValues.pitch_type;
+
+	let regressors = ["release_speed", "release_pos_x", "release_pos_y", "release_pos_z", "pfx_x", "pfx_z", 
+	"vx0", "vy0", "vz0", "ax", "ay", "az", "release_spin_rate", "spin_axis", 
+	"release_extension", "vaa", "haa", "abs_axis_differential", "coors"]
+
+	for (let i = 0; i < regressors.length; i++) {
+		let v = rowValues[regressors[i]]
+
+		cells[regressors[i]] = row.insertCell(3 + i)
+		cells[regressors[i]].innerHTML = v 
+
+		if ((v > means[regressors[i]] + 0.25 * stds[regressors[i]] &&
+		v < means[regressors[i]] - 0.25 * stds[regressors[i]]) ) {
+			cells[regressors[i]].style.backgroundColor = "white" 
+		} else if (v >= means[regressors[i]] + 0.25 * stds[regressors[i]] &&
+		v < means[regressors[i]] + 0.5 * stds[regressors[i]]) {
+			cells[regressors[i]].style.backgroundColor = "#ffaaaa" 
+		} else if (v >= means[regressors[i]] + 0.5 * stds[regressors[i]] &&
+		v < means[regressors[i]] + 1 * stds[regressors[i]]) {
+			cells[regressors[i]].style.backgroundColor = "#ff5555" 
+		} else if (v >= means[regressors[i]] + 1 * stds[regressors[i]]) {
+			cells[regressors[i]].style.backgroundColor = "#ff0000" 
+		} else if (v <= means[regressors[i]] - 0.25 * stds[regressors[i]] &&
+		v > means[regressors[i]] - 0.5 * stds[regressors[i]]) {
+			cells[regressors[i]].style.backgroundColor = "#aaaaff" 
+		} else if (v <= means[regressors[i]] - 0.5 * stds[regressors[i]] &&
+		v > means[regressors[i]] - 1 * stds[regressors[i]]) {
+			cells[regressors[i]].style.backgroundColor = "#5555ff" 
+		} else if (v <= means[regressors[i]] - 1 * stds[regressors[i]]) {
+			cells[regressors[i]].style.backgroundColor = "#0000ff" 
+		} else {
+			cells[regressors[i]].style.backgroundColor = "white" 
+		}
+	}
+
+	let pos = regressors.length + 3
+
+	const season = row.insertCell(pos);
 	season.innerHTML = rowValues.season;
+	const stuffPlus = row.insertCell(pos++);
+	stuffPlus.innerHTML = rowValues.stuff_plus;
 
 }
 
