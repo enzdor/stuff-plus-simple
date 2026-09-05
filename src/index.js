@@ -6,8 +6,9 @@ const workerUrl = new URL(
 );
 const wasmUrl = new URL("sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
 
-// The database is deployed beside the generated worker in dist/. Resolving it
-// from that asset avoids hard-coding either the local or GitHub Pages base path.
+// GitHub Pages may gzip the response to a HEAD request, so the compressed
+// Content-Length cannot be used as SQLite's file size. Webpack injects the real
+// size and a content hash, and the VFS maps test.db as one logical chunk.
 const databaseUrl = new URL("./test.db", workerUrl);
 
 const worker = await createDbWorker(
@@ -15,9 +16,13 @@ const worker = await createDbWorker(
 		{
 			from: "inline",
 			config: {
-				serverMode: "full",
-				url: databaseUrl.toString(),
+				serverMode: "chunked",
 				requestChunkSize: 4096,
+				databaseLengthBytes: __DATABASE_SIZE_BYTES__,
+				serverChunkSize: __DATABASE_SIZE_BYTES__,
+				urlPrefix: `${databaseUrl.toString()}?chunk=`,
+				suffixLength: 1,
+				cacheBust: __DATABASE_CACHE_BUST__,
 			},
 		},
 	],
@@ -377,5 +382,3 @@ function newRowRegressor(rowValues) {
 }
 
 window.EntryPoint = EntryPoint
-
-

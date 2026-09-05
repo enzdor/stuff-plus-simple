@@ -11,7 +11,9 @@ The database is hosted directly in your browser using [sql.js-httpvfs](https://g
 ## Run and Serve
 
 The database URL is resolved relative to the generated assets, so the same build
-works locally and on GitHub Pages. To build and serve the website:
+works locally and on GitHub Pages. The build records the database's uncompressed
+size in the bundle for the HTTP virtual filesystem. To build and serve the
+website:
 
 ```
 npm i
