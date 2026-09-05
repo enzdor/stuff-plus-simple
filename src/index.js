@@ -6,29 +6,24 @@ const workerUrl = new URL(
 );
 const wasmUrl = new URL("sql.js-httpvfs/dist/sql-wasm.wasm", import.meta.url);
 
-let worker;
+// The database is deployed beside the generated worker in dist/. Resolving it
+// from that asset avoids hard-coding either the local or GitHub Pages base path.
+const databaseUrl = new URL("./test.db", workerUrl);
 
-try {
-	worker = await createDbWorker(
-		[
-			{
-				from: "inline",
-				config: {
-					serverMode: "full",
-					// production path is /stuff-plus-simple/dist/test.db
-					// dev path is        /dist/test.db
-					url: "/dist/test.db",
-					// url: "/stuff-plus-simple/dist/test.db",
-					requestChunkSize: 4096,
-				},
+const worker = await createDbWorker(
+	[
+		{
+			from: "inline",
+			config: {
+				serverMode: "full",
+				url: databaseUrl.toString(),
+				requestChunkSize: 4096,
 			},
-		],
-		workerUrl.toString(),
-		wasmUrl.toString()
-	);
-} catch (e) {
-	console.log(e)
-}
+		},
+	],
+	workerUrl.toString(),
+	wasmUrl.toString()
+);
 
 const regressors_means = await worker.db.query(`
 	select * from regressors_means
@@ -382,7 +377,5 @@ function newRowRegressor(rowValues) {
 }
 
 window.EntryPoint = EntryPoint
-
-
 
 

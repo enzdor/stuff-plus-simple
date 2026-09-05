@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "build": "webpack --mode=production",
+    "build:dev": "webpack --mode=development",
+    "serve": "http-server"
+  },
   "devDependencies": {
     "http-server": "^14.1.1",
     "webpack": "^5.97.1",

@@ -10,37 +10,22 @@ The database is hosted directly in your browser using [sql.js-httpvfs](https://g
 
 ## Run and Serve
 
-If you are planning to run this website on your computer, you will need to change one line of code in `src/index.js`. The line of code you're supposed to change is commented:
-
-```
-worker = await createDbWorker(
-  [
-    {
-			from: "inline",
-			config: {
-				serverMode: "full",
-				// production path is /stuff-plus-simple/dist/test.db
-				// dev path is        /dist/test.db
-				// url: "/dist/test.db",
-				url: "/stuff-plus-simple/dist/test.db",
-				requestChunkSize: 4096,
-			},
-		},
-	],
-	workerUrl.toString(),
-	wasmUrl.toString()
-);
-```
-
-The url should be set to `/dist/test.db`. The other url is used for the website to work on github pages. To build and serve the website you just need to:
+The database URL is resolved relative to the generated assets, so the same build
+works locally and on GitHub Pages. To build and serve the website:
 
 ```
 npm i
-node_modules/.bin/webpack --mode=development
-node_modules/.bin/http-server
+npm run build
+npm run serve
 ```
 
-And you'll be able to access the website through port :8080.
+Then open <http://localhost:8080>.
+
+## Deploy to GitHub Pages
+
+Run `npm run build` and commit the generated files in `dist/`, including
+`bundle.js`, the generated worker, the WASM file, and `test.db`. Configure GitHub
+Pages to publish from the repository root. No source-code path changes are needed
+between local development and deployment.
 
 ## TODO
-
